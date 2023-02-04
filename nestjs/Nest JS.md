@@ -62,7 +62,7 @@ const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 These are responsible for handling incoming requests and returning responses to client.
 
-![](./nestjs/controllers.PNG)
+![controllers](../images/controllers.PNG)
 
 A controller's purpose is to receive specific requests for the application. The routing mechanism controls which controller receives which requests. Frequently, each controller has more than one route, and different routes can perform different actions.
 
@@ -203,7 +203,7 @@ export class CreateCatDto {
 
 Providers are a fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider – services, repositories, factories, helpers, and so on. The main idea of a provider is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" instances of objects can largely be delegated to the Nest runtime system.
 
-![Providers](./nestjs/providers.png)
+![Providers](../images/providers.png)
 
 Providers are plain JavaScript classes that are declared as `providers` in a module.
 
@@ -227,7 +227,7 @@ export class CatsService {
 }
 ```
 
-CatsService is a basic class with one property and two methods. The only new feature is that it uses the `@Injectable()` decorator. The `@Injectable()` decorator attaches metadata, which declares that CatsService is a class that can be managed by the Nest IoC container. 
+CatsService is a basic class with one property and two methods. The only new feature is that it uses the `@Injectable()` decorator. The `@Injectable()` decorator attaches metadata, which declares that CatsService is a class that can be managed by the Nest IoC container.
 
 ```
 @Controller('cats')
@@ -290,7 +290,7 @@ Nest will now be able to resolve the dependencies of the `CatsController` class.
 
 A module is a class annotated with a `@Module()` decorator. The `@Module()` decorator provides metadata that Nest makes use of to organize the application structure.
 
-![Modules](./nestjs/modules.png)
+![Modules](../images/modules.png)
 
 Each application has at least one module, a root module. The root module is the starting point Nest uses to build the application graph - the internal data structure Nest uses to resolve module and provider relationships and dependencies.
 
@@ -363,12 +363,12 @@ import { CatsService } from './cats.service';
 export class CatsModule {}
 ```
 
-The `@Global()` decorator makes the module global-scoped. Global modules should be registered only once, generally by the root or core module. 
+The `@Global()` decorator makes the module global-scoped. Global modules should be registered only once, generally by the root or core module.
 
 #### Dynamic modules
-This feature enables you to easily create customizable modules that can register and configure providers dynamically. 
+This feature enables you to easily create customizable modules that can register and configure providers dynamically.
 
-Following is an example of a dynamic module definition for a `DatabaseModule` : 
+Following is an example of a dynamic module definition for a `DatabaseModule` :
 ```
 import { Module, DynamicModule } from '@nestjs/common';
 import { createDatabaseProviders } from './database.providers';
@@ -434,7 +434,7 @@ export class AppModule {}
 
 Middleware is a function which is called before the route handler. Middleware functions have access to the request and response objects, and the `next()` middleware function in the application’s request-response cycle. The next middleware function is commonly denoted by a variable named `next`.
 
-![Middleware](./nestjs/middleware.png)
+![Middleware](../images/middleware.png)
 
 Nest middleware are, by default, equivalent to express middleware.
 
@@ -548,7 +548,7 @@ await app.listen(3000);
 
 A pipe is a class annotated with the `@Injectable()` decorator, which implements the `PipeTransform` interface.
 
-![Pipes](./nestjs/pipes.png)
+![Pipes](../images/pipes.png)
 
 Pipes have two typical use cases:
 
@@ -571,7 +571,7 @@ Nest comes with nine pipes available out-for-the-box:
 - ParseFilePipe
 
 #### Binding pipes
-To use a pipe, we need to bind an instance of the pipe class to the appropriate context. 
+To use a pipe, we need to bind an instance of the pipe class to the appropriate context.
 ```
 @Get(':id')
 async findOne(@Param('id', ParseIntPipe) id: number) {
@@ -633,7 +633,7 @@ async create(@Body() createCatDto: CreateCatDto) {
 
 #### Class Validator
 
-Nest works well with the class-validator library. This powerful library allows you to use decorator-based validation. Decorator-based validation is extremely powerful, especially when combined with Nest's Pipe capabilities since we have access to the `metatype` of the processed property. 
+Nest works well with the class-validator library. This powerful library allows you to use decorator-based validation. Decorator-based validation is extremely powerful, especially when combined with Nest's Pipe capabilities since we have access to the `metatype` of the processed property.
 
 ```
 import { IsString, IsInt } from 'class-validator';
@@ -654,7 +654,7 @@ export class CreateCatDto {
 
 A guard is a class annotated with the `@Injectable()` decorator, which implements the `CanActivate` interface.
 
-![Guards](./nestjs/guards.png)
+![Guards](../images/guards.png)
 
 Guards have a single responsibility. They determine whether a request will be handled by route handler or not depending upon certain conditions like permissions, roles, ACL present at run-time. This is often referred to as authorization.
 
@@ -666,7 +666,7 @@ Guards have access to `ExecutionContext` instance and know exactly what's going 
 
 #### Authorization guard
 
-Here is a simple auth guard which validates user permissions - 
+Here is a simple auth guard which validates user permissions -
 
 ```
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
@@ -683,7 +683,7 @@ export class AuthGuard implements CanActivate {
 }
 ```
 
-The logic inside `validateRequest` can be simple or sophisticated. 
+The logic inside `validateRequest` can be simple or sophisticated.
 
 Every guard must implement a `canActivate()` function. This function should return a boolean, indicating whether the current request is allowed or not. It can return the response either synchronously or asynchronously (via a `Promise` or Observable). Nest uses the return value to control the next action:
 
@@ -793,7 +793,7 @@ findOne(id: string) {
 	}
 ```
 
-results - 
+results -
 ```
 {
 	"statusCode": 500,
@@ -804,7 +804,7 @@ results -
 ### Modules
 
 Business logic is encompassed in modules. Modules organizes the controllers, services and imports into one bundle. When a nest js app starts, it already have a `AppModule` by default.
-Coffees module can be bundled in a module like this - 
+Coffees module can be bundled in a module like this -
 ```
 @Module({
 	controllers: [CoffeesController],
@@ -820,7 +820,7 @@ DTO are classes that ensures what input we expected like in body.Dtos are like i
 
 ```
 /**
- * Generate a DTO class with the Nest CLI 
+ * Generate a DTO class with the Nest CLI
  * --no-spec (no test file needed for DTO's)
  */
 nest g class coffees/dto/create-coffee.dto --no-spec
@@ -850,7 +850,7 @@ Nest.js offers a global validation pipe which will validate all the incoming dat
 app.useGlobalPipes(new ValidationPipe());
 
 // Install needed dependencies
-npm i class-validator class-transformer 
+npm i class-validator class-transformer
 
 // Implement validation rules in our CreateCoffeeDto
 import { IsString } from 'class-validator';
@@ -866,7 +866,7 @@ export class CreateCoffeeDto {
   readonly flavors: string[];
 }
 
-// Install @nestjs/mapped-types 
+// Install @nestjs/mapped-types
 npm i @nestjs/mapped-types
 
 /* UpdateCoffeeDto - FINAL CODE  */

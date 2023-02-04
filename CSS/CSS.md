@@ -7,7 +7,7 @@ modified: '2022-05-14T11:40:15.016Z'
 
 # CSS
 
-![CSS Anatomy](./css_anatomy.PNG)
+![CSS Anatomy](../images/css_anatomy.PNG)
 
 ### Inline Styling
 ```
@@ -19,7 +19,7 @@ It can't use media queries.
 ```
 <h1 class='green bold'> ... </h1>  //multiple classes
 .brand {
- 
+
 }
 ```
 We can add multiple classes to an HTML element’s class attribute by separating them with a space. This enables us to mix and match CSS classes to create many unique styles without writing a custom class for every style combination needed.
@@ -29,7 +29,7 @@ We can add multiple classes to an HTML element’s class attribute by separating
 ```
 <h1 id='large-title'> ... </h1>
 #large-title {
- 
+
 }
 ```
 
@@ -39,13 +39,13 @@ We can add multiple classes to an HTML element’s class attribute by separating
 * And it can get more granular from there by adding type and/or attribute values. One way is by using type[attribute*=value]. In short, this code selects an element where the attribute contains any instance of the specified value. Let’s take a look at an example.
 
 ```
-<img src='/images/seasons/cold/winter.jpg'>
-<img src='/images/seasons/warm/summer.jpg'>
+<img src=../images/images/seasons/cold/winter.jpg'>
+<img src=../images/images/seasons/warm/summer.jpg'>
 
 img[src*='winter'] {
   height: 50px;
 }
- 
+
 img[src*='summer'] {
   height: 100px;
 }
@@ -71,7 +71,7 @@ Specificity is the order by which the browser decides which CSS styles will be d
 h1 {
   color: red;
 }
- 
+
 .headline {
   color: firebrick;
 }
@@ -80,7 +80,7 @@ h1 {
 ## Selectors Chaining
 ```
 h1.special {
- 
+
 }
 ```
 The code above would select only the ```<h1>``` elements with a class of special. If a <p> element also had a class of special, the rule in the example would not style the paragraph.
@@ -95,7 +95,7 @@ CSS supports selecting elements that are nested within other HTML elements, also
 </ul>
 
 .main-list li {
- 
+
 }
 ```
 ```.main-list``` selects the element with the.main-list class (the ```<ul>``` element). The descendant ```<li>```‘s are selected by adding li to the selector, separated by a space. This results in ```.main-list li``` as the final selector.
@@ -103,7 +103,7 @@ CSS supports selecting elements that are nested within other HTML elements, also
 ## Multiple Selectors
 It saves our time from writing the same ruleset for multiple elements.
 ```
-h1, 
+h1,
 .menu {
   font-family: Georgia;
 }
@@ -115,7 +115,7 @@ It will override any style no matter how specific it is. As a result, it should 
 p {
   color: blue !important;
 }
- 
+
 .main p {
   color: red;
 }
@@ -124,7 +124,7 @@ p {
 
 
 ## Box Model
-![Box Model](./box_model.PNG)
+![Box Model](../images/box_model.PNG)
 
 It includes:
   1. width and height
@@ -134,7 +134,7 @@ It includes:
 
 * The default box model that is __content-box__ has an awkward limitation. For e.g, consider the following figure and the CSS
 
-  ![Content Box](./content_box.PNG)
+  ![Content Box](../images/content_box.PNG)
   ```
   h1 {
     border: 1px solid black;
@@ -151,17 +151,17 @@ It includes:
     box-sizing: border-box;
   }
   ```
-  ![Content Box](./border_box.PNG)
+  ![Content Box](../images/border_box.PNG)
 
 ### Margin Collapse
-![Margin collapse](./margin_collapse.PNG)
+![Margin collapse](../images/margin_collapse.PNG)
 * No collapse on horizontal.
 * Larger margin is selected in vertical collapse
 
 
 ## Display And Positioning
 ### Relative Position
-  ![Relative Positioning](./relative_positioning.PNG)
+  ![Relative Positioning](../images/relative_positioning.PNG)
   It shifts the container to a position specified by offset relative to it's static position. __Offset must be specified.__
   ```
   .green-box {
@@ -172,14 +172,14 @@ It includes:
   }
   ```
 ### Absolute Position
-  ![Absolute Positioning](./absolute_positioning.PNG)
+  ![Absolute Positioning](../images/absolute_positioning.PNG)
   The element will be positioned relative to its closest positioned parent element, while offset properties can be used to determine the final position from there. __Offset must be specified.__
 
 ### Fixed Position
-  ![Fixed Positioning](./fixed_positioning.webp)
+  ![Fixed Positioning](../images/fixed_positioning.webp)
 
 ### Sticky Position
-  ![Sticky Positioning](./sticky_positioning.webp)
+  ![Sticky Positioning](../images/sticky_positioning.webp)
   It keeps an element in the document flow as the user scrolls, but sticks to a specified position as the page is scrolled further.__Offset must be specified.__
   ```
   .box-bottom {
@@ -191,10 +191,10 @@ It includes:
   In the example above, the .box-bottom <div> will remain in its relative position, and scroll as usual. When it reaches 240 pixels from the top, it will stick to that position until it reaches the bottom of its parent container where it will “unstick” and rejoin the flow of the document.
 
 ### z-index
-  ![z-index](./z_index.PNG)
+  ![z-index](../images/z_index.PNG)
 
 ### inline-block display
-  ![inline block display](./inline_block.PNG)
+  ![inline block display](../images/inline_block.PNG)
   ```
   <div class="rectangle">
     <p>I’m a rectangle!</p>
@@ -214,7 +214,7 @@ It includes:
   There are three rectangular divs that each contain a paragraph of text. The ```.rectangle <div>```s will all appear inline (provided there is enough space from left to right) with a width of 200 pixels and height of 300 pixels, even though the text inside of them may not require 200 pixels by 300 pixels of space.
 
 ### Float property
-  ![float property](./float_property.PNG)
+  ![float property](../images/float_property.PNG)
   __floated element must have width specified__. Otherwise, the element will assume the full width of its containing element, and changing the float value will not yield any visible results.
 
 ### Clear property
@@ -231,7 +231,7 @@ The clear property specifies how elements should behave when they bump into each
   3. Lightness refers to how light or dark the color is. Halfway, or 50%, is normal lightness. Imagine a sliding dimmer on a light switch that starts halfway. Sliding the dimmer up towards 100% makes the color lighter, closer to white. Sliding the dimmer down towards 0% makes the color darker, closer to black.
 
   Opacity: amount of transparency so that some or all overlapping part is visible through a covering element.
-  Alpha: It's a decimal number between 0 and 1. It is the amount of background to mix with the foreground. When a color's alpha is below 1, any color behind it can be blended in. 
+  Alpha: It's a decimal number between 0 and 1. It is the amount of background to mix with the foreground. When a color's alpha is below 1, any color behind it can be blended in.
   ```
   color: rgba(243,45,98,0.33);
   color: hsla(213, 34%, 56%, 0.12);
@@ -243,7 +243,7 @@ The clear property specifies how elements should behave when they bump into each
 ### Typography
   * Web safe fonts: fonts that will appear same across all browsers and OS.
   * Multiple words font must be enclosed in quotation. like ```font-family: Caslon,'Times New Roman'```
-  ![Serif vs sans serif](./serif_vs_sans_serif.PNG)
+  ![Serif vs sans serif](../images/serif_vs_sans_serif.PNG)
 
   * Font weight: controls how bold or thin the text appears. It has *bold*, *normal*, *lighter*, and *bolder* values or can be between 1(lightest) and 1000(boldest).
   ```
@@ -262,7 +262,7 @@ The clear property specifies how elements should behave when they bump into each
       font-family: 'Roboto', sans-serif;
     }
     ```
-    
+
   * Adding web fonts using ```@font-face```
     ```
     @font-face {
@@ -312,7 +312,7 @@ ___________________
     height: 300px;
     width: 500px;
   }
-  
+
   .main .subsection {
     height: 50%;
     width: 50%;
@@ -333,9 +333,9 @@ ___________________
       height: 200px;
       overflow: hidden;
     }
-    
+
     .container img {
-      max-width: 100%; 
+      max-width: 100%;
       height: auto; // image height will automatically scale proportionally with width
       display: block; //image will be displayed as block level elements
     }
@@ -347,13 +347,13 @@ ___________________
   body {
     background-image: url('#');
     background-repeat: no-repeat; //without repeating
-    background-position: center; 
+    background-position: center;
     background-size: cover; //responsible for scaling
   }
   ```
 
 * Media queries
-  
+
   * Screen width or height
     ```
     @media only screen and (min-width: 300px) and (max-width: 500px) {
@@ -378,7 +378,7 @@ ___________________
 
   * Device Breakpoints
     Here is the breakpoint dimensions that should be checked for responsiveness across all devices
-    ![Breakpoints](./breakpoint_reference.PNG)
+    ![Breakpoints](../images/breakpoint_reference.PNG)
 
 
 ## Flexbox Layout
@@ -425,7 +425,7 @@ ___________________
   6. align-content: if flex container has multiple rows of content, it is used to space rows from top to bottom.
   __Note__: align-items property is used to align items within a single row, whereas align-content is used to align multiple rows. AND it doesn't use main axis to position flex items
   7. flex-direction: there are two main axis, i.e, main(horizontal) and cross(vertical) axis. these two axis are interchangeable. We can switch them using *flex-direction* property. Accepted values: *row*, *row-reverse*, *column*, *column-reverse*.
-  8. flex-flow: flex-direction and flex-wrap can be specified together as 
+  8. flex-flow: flex-direction and flex-wrap can be specified together as
   ```
   flex-flow: column wrap; // flex-direction, flex-wrap
   ```
@@ -449,9 +449,9 @@ There are three main components of a grid:
   Whitespace or negative space refers to the emptiness between elements. Whether that's in the gutter of the columns or additional padding around a block of text.
   It is of two types:
   1. Passive whitespace: or micro whitespace. It is used to improve aesthetics of the layout. It is incorporated in CSS using *line-height* or *margin* properties.
-    ![Passive whitespace](./passive_whitespace.PNG)
+    ![Passive whitespace](../images/passive_whitespace.PNG)
   2. Active Whitespace: It is intentional and also called macro whitespace. It refers to enhancing the overall page structure through space to emphasize content or guide users from one point to next
-    ![Active whitespace](./active_whitespace.PNG)
+    ![Active whitespace](../images/active_whitespace.PNG)
 
 ### Grids vs Flexbox
   Flexbox is mostly useful for positioning items in a 1-D layout, but Grids is most useful for 2-D dimensional layout, providing many tools for aligning and moving elements across both rows and columns.
@@ -465,7 +465,7 @@ There are three main components of a grid:
     grid-template-columns: 20px 40% 60px;
   }
   ```
-  2. *grid-template-rows*: defines the number of rows and sets the height of each row. 
+  2. *grid-template-rows*: defines the number of rows and sets the height of each row.
   3. *grid-template*: shorthand for grid-template-rows and grid-template-columns
   ```
   .grid {
@@ -517,13 +517,10 @@ There are three main components of a grid:
     grid-column-start: 5;
     grid-column-end: 7; // grid-column: 5/7; or grid-column: 5/span 2;
   }
-  ``` 
+  ```
   8. grid-area: shorthand for grid-row-start, grid-column-start, grid-row-end, grid-column-end, all in one line
 
-  ![Grid Overview](./grid_overview.PNG)
+  ![Grid Overview](../images/grid_overview.PNG)
 
 Practice Grid at https://codepip.com/games/grid-garden/
 Check interactive documentation at https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout
-
-
-

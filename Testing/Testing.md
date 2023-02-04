@@ -10,7 +10,7 @@ __Software testing__ is the process of assessing the completeness and quality of
 
 __Manual testing__ is a form of testing done by a human interacting with a system. With web apps, this might be clicking, dragging, and typing through a webpage. A list of actions and expected behaviors would be given. If the observed behavior doesn’t match the expected behavior, the application has an error.
 
-__Automated testing__ is the use of software to control the execution of tests and the comparison of actual behavior to expected behavior. 
+__Automated testing__ is the use of software to control the execution of tests and the comparison of actual behavior to expected behavior.
 
 __Compared to manual testing, automated testing is__
 * Faster: it tests more of your product in less time.
@@ -81,7 +81,7 @@ const assert = require('assert');
 // Naive approach
 describe('.pop', () => {
   it('returns the last element in the array [naive]', () => {
-    assert.ok(['padawan', 'knight'].pop() === 'knight'); 
+    assert.ok(['padawan', 'knight'].pop() === 'knight');
   });
 });
 
@@ -118,7 +118,7 @@ describe('appendFileSync', () => {
     // Setup
     const path = './message.txt';
     const str = 'Hello Node.js';
-    
+
     // Exercise: write to file
     fs.appendFileSync(path, str);
 
@@ -142,11 +142,11 @@ A __hook__ is a piece of code that is executed when a certain event happens. Hoo
 
 ```
 describe('example', () => {
- 
+
   afterEach(() => {
     // teardown goes here
   });
- 
+
   it('.sample', () => {
     // test goes here
   });
@@ -168,12 +168,12 @@ describe('appendFileSync', () => {
     // Teardown: delete path
     fs.unlinkSync(path);
   });
-  
+
   it('writes a string to text file at given path name', () => {
 
     // Setup
     const str = 'Hello Node.js';
-    
+
     // Exercise: write to file
     fs.appendFileSync(path, str);
 
@@ -200,10 +200,10 @@ Read the example code below. Will this assertion throw an error?
 ```
 const landAnimals = ['giraffe', 'squirrel'];
 const waterAnimals = ['shark', 'stingray'];
- 
+
 landAnimals.push('frog');
 waterAnimals.push('frog');
- 
+
 assert.ok(landAnimals[2] == waterAnimals[2]);
 ```
 The above assertion is checking for equality. In order to understand this you must evaluate the entire expression within the parentheses of .ok().
@@ -278,7 +278,7 @@ Test-driven development (TDD) is a software development process relying on softw
 
 ## TDD with Mocha
 One of the driving forces of TDD is the red-green-refactor cycle. “Red” and “green” correspond to the color of the text that our test framework produces in the terminal while running the tests in our suite. Red signifies failing tests and green corresponds to passing tests.
-![red-green-refactor-tdd](./red-green-refactor-tdd.webp)
+![red-green-refactor-tdd](../images/red-green-refactor-tdd.webp)
 Use this red, green, refactor diagram to help you as you read the steps below:
 
 * Red — Write tests that describe the intended behavior of implementation code, and then compare developer expectations with the actual results of implementation code. The tests should always fail at first because the implementation code for the desired behavior will be written in response to the failing test.
@@ -316,7 +316,7 @@ Treat your test suite with as much respect as you would your live code, as it ca
 
 ## Testing in React
 
-__Jest is a javascript testing framework__. It provides some of the unique features bundled in a single framework like, zero config, snapshots, isolated testing and its well documented api. 
+__Jest is a javascript testing framework__. It provides some of the unique features bundled in a single framework like, zero config, snapshots, isolated testing and its well documented api.
 
 While, __Enzyme is a JavaScript Testing utility for React__ that makes it easier to test your React Components' output. You can also manipulate, traverse, and in some ways simulate runtime given the output.
 

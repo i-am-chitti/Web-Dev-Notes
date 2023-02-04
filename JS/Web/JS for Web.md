@@ -20,13 +20,13 @@ Lexical scope(available data + variables where the function was defined) determi
 ### Defer Attribute
 
   ```
-  <script src="example.js" defer></script> 
+  <script src="example.js" defer></script>
   ```
   * It specifies that script should be executed after HTML file is completely parsed. So, it delays the execution. It is useful when a script contains functionality that requires interaction with DOM
 
 ### Async Attribute
 
-  * It loads and executes the script asynchrously. It means that script will not wait until the entire page is parsed; it will execute immediately after it has been downloaded. 
+  * It loads and executes the script asynchrously. It means that script will not wait until the entire page is parsed; it will execute immediately after it has been downloaded.
   * It is useful for scripts that are independent of other scripts. If it doesn't matter exactly at which point script file is executed, then it is the most suitable option.
 
 
@@ -38,7 +38,7 @@ The DOM is a logical tree-like Model that organizes a web page’s HTML Document
 
 __Note__: There are other types of documents, such as XML and SVG, that are also modeled as DOM structures.
 
-![DOM Strucutre](./dom_structure.png)
+![DOM Strucutre](../../images/dom_structure.PNG)
 
 
 #### ```.querySelector()```
@@ -61,11 +61,11 @@ __Note__: There are other types of documents, such as XML and SVG, that are also
 
   ```
   let paragraph = document.createElement('p'); //creates an empty element
- 
+
   paragraph.id = 'info'; // assigns an id
-  
+
   paragraph.innerHTML = 'The text inside the paragraph'; //sets innerHTML
-  
+
   document.body.appendChild(paragraph); //inserts it at last
   ```
 
@@ -94,22 +94,22 @@ __Note__: There are other types of documents, such as XML and SVG, that are also
   element.onclick = turnButtonRed;
   ```
 
-### Traversing the DOM 
+### Traversing the DOM
   ```
   let first = document.body.firstChild; //first child of body element
-  first.innerHTML = 'I am the child!'; 
+  first.innerHTML = 'I am the child!';
   first.parentNode.innerHTML = 'I am the parent and my inner HTML has been replaced!'; //parent node of first i.e, body
   ```
 
 ### Event Handler Registration
   ```
   let eventTarget = document.getElementById('targetElement');
- 
+
   eventTarget.addEventListener('click', function() {
     // this block of code will run when click event happens on eventTarget element
   });
   ```
-  Event Handlers can also be registered by setting an ```.onevent``` property on a DOM element (event target). 
+  Event Handlers can also be registered by setting an ```.onevent``` property on a DOM element (event target).
   ```
   eventTarget.onclick = eventHandlerFunction;
   ```
@@ -163,5 +163,3 @@ document.getElementById("myDiv").addEventListener("click", myFunction, true);
 
 share.onclick = sharePhoto;
   ```
-
-  

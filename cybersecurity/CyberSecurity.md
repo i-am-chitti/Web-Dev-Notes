@@ -13,7 +13,7 @@ DNS (Domain Name System) provides a simple way for us to communicate with device
 
 ### Domain Hierarchy
 
-![hierarchy](./cybersecurity/domain_levels.png)
+![hierarchy](../images/domain_levels.png)
 
 #### TLD (Top-Level Domain)
 
@@ -53,7 +53,7 @@ TXT records are free text fields where any text-based data can be stored. TXT re
 
 ### What happens when you make a DNS request
 
-![dns](./cybersecurity/dns.png)
+![dns](../images/dns.png)
 
 1. When you request a domain name, your computer first checks its local cache to see if you've previously looked up the address recently; if not, a request to your Recursive DNS Server will be made.
 
@@ -92,7 +92,7 @@ When we access a website, your browser will need to make requests to a web serve
 
 If you’ve used the internet, you’ve used a URL before. A URL is predominantly an instruction on how to access a resource on the internet. The below image shows what a URL looks like with all of its features (it does not use all features in every request).
 
-![URL structure](./cybersecurity/newurl.png)
+![URL structure](../images/newurl.png)
 
 **Scheme**: This instructs on what protocol to use for accessing the resource such as HTTP, HTTPS, FTP (File Transfer Protocol).
 
@@ -112,7 +112,7 @@ If you’ve used the internet, you’ve used a URL before. A URL is predominantl
 
 It's possible to make a request to a web server with just one line "GET / HTTP/1.1"
 
-![request](./cybersecurity/line.png)
+![request](../images/line.png)
 
 But for a much richer web experience, you’ll need to send other data as well. This other data is sent in what is called headers, where headers contain extra information to give to the web server you’re communicating with, but we’ll go more into this in the Header task.
 
@@ -214,7 +214,7 @@ There are a lot of different HTTP status codes and that's not including the fact
 * 405 - Method Not Allowed	The resource does not allow this method request, for example, you send a GET request to the resource /create-account when it was expecting a POST request instead.
 * 404 - Page Not Found	The page/resource you requested does not exist.
 * 500 - Internal Service Error	The server has encountered some kind of error with your request that it doesn't know how to handle properly.
-* 503 - Service Unavailable	
+* 503 - Service Unavailable
 This server cannot handle your request as it's either overloaded or down for maintenance.
 
 ### Headers
@@ -254,7 +254,7 @@ These are the headers that are returned to the client from the server after a re
 
 You've probably heard of cookies before, they're just a small piece of data that is stored on your computer. Cookies are saved when you receive a "Set-Cookie" header from a web server. Then every further request you make, you'll send the cookie data back to the web server. Because HTTP is stateless (doesn't keep track of your previous requests), cookies can be used to remind the web server who you are, some personal settings for the website or whether you've been to the website before. Let's take a look at this as an example HTTP request:
 
-![cookie flow](./cybersecurity/cookie_flow.png)
+![cookie flow](../images/cookie_flow.png)
 
 Cookies can be used for many purposes but are most commonly used for website authentication. The cookie value won't usually be a clear-text string where you can see the password, but a token (unique secret code that isn't easily humanly guessable).
 

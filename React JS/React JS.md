@@ -58,7 +58,7 @@ const jsx = (
 ```
 // wrong
 const paragraphs = (
-  <p>I am a paragraph.</p> 
+  <p>I am a paragraph.</p>
   <p>I, too, am a paragraph.</p>
 );
 
@@ -122,7 +122,7 @@ ReactDOM.render(<MyComponentClass />, document.getElementById('app'));
 `create-react-app` has taken care of setting up the main structure of the application as well as a couple of developer settings
 
 Its directory structure is:
-![react app](./create-react-app.PNG)
+![react app](../images/create-react-app.PNG)
 
 ### Directory Importance
 
@@ -148,7 +148,7 @@ This directory contains assets that will be served directly without additional p
 The manifest file configures how your web app will behave if it is added to an Android user’s home screen (Android users can “shortcut” web apps and load them directly from the Android UI).
 
 ## Interaction among React Components
-When you use React.js, every JavaScript file in your application is invisible to every other JavaScript file by default. 
+When you use React.js, every JavaScript file in your application is invisible to every other JavaScript file by default.
 
 ### Through import and export
 import syntax
@@ -208,7 +208,7 @@ Button.defaultProps = { // always a object
 } // will be displayed if no props are passed
 
 ReactDOM.render(
-  <Button />, 
+  <Button />,
   document.getElementById('app')
 );
 ```
@@ -244,7 +244,7 @@ class Mood extends React.Component {
 
 ReactDOM.render(<Mood />, document.getElementById('app'));
 ```
-State are specific to components. They may be passed down to other components as props. 
+State are specific to components. They may be passed down to other components as props.
 States are not changed in `render()` function. They are always chanded through `this.setState()` wrapped in a function that gets triggered once a event occured.
 
 *Reason behing binding*: State changing methods need to be bind with `this` keyword in constructor due to the way event handlers functions in js.
@@ -287,7 +287,7 @@ The component lifecycle has three high-level parts:
 2. Updating, when the component updates as a result of changed state or changed props
 3. Unmounting, when the component is being removed from the DOM
 Every React component you’ve ever interacted with does the first step at a minimum. If a component never mounted, you’d never see it!
-![component lifecycle](./react_diagram-lifecycle-flow.webp)
+![component lifecycle](../images/react_diagram-lifecycle-flow.webp)
 
 ## Functional Component and Hooks
 React Hooks, plainly put, are functions that let us manage the internal state of components and handle post-rendering side effects directly from our function components. Hooks don’t work inside classes — they let us use fancy React features without classes. Keep in mind that function components and React Hooks do not replace class components. They are completely optional; just a new tool that we can take advantage of.
@@ -297,7 +297,7 @@ No need to worry about binding functions to class instances, working with constr
 
 ### useRef Hook
 
-`useRef` returns a reference object on which `current` stores the present value. It is similar to useState but on change of its value, re-render doesn't occur. 
+`useRef` returns a reference object on which `current` stores the present value. It is similar to useState but on change of its value, re-render doesn't occur.
 
 Calling `const reference = useRef(initialValue)` with the initial value returns a special object named reference. The reference object has a property current: you can use this property to read the reference value reference.current, or update `reference.current = newValue`. The reference object can't be modified to contain any other key. It won't also throw error in case it is modified like `reference.someThing=somevalue`.
 
@@ -307,7 +307,7 @@ References can also access DOM elements. Assign the reference to ref attribute o
 
 ### useMemo Hook
 
-`useMemo` hook is similar to useEffect except it is used in case of heavy computation. So, if there is some cryptoanalysis function or any other heavy computation function in a component, you might don't want to compute it everytime rerender happens. 
+`useMemo` hook is similar to useEffect except it is used in case of heavy computation. So, if there is some cryptoanalysis function or any other heavy computation function in a component, you might don't want to compute it everytime rerender happens.
 
 ```
 import { useMemo } from "react";
@@ -341,18 +341,18 @@ const Component = () => {
 
 `useState` returns an array consisting of two values, one is the state variable and other is its setter. So, we can use our local variable as reference to modify the state. It can also accept a function like `useState(() => {})`
 
-`const [mood, changeMood] = useState('happy');` 
+`const [mood, changeMood] = useState('happy');`
 
 Often, the next value of our state is calculated using the current state. In this case, it is best practice to update state with a callback function. If we do not, we risk capturing outdated, or “stale”, state values.
 See example for state using previous state values:
 ```
 import React, { useState } from 'react';
- 
+
 export default function Counter() {
   const [count, setCount] = useState(0);
- 
+
   const increment = () => setCount(prevCount => prevCount + 1);
- 
+
   return (
     <div>
       <p>Wow, you've clicked that button: {count} times</p>
@@ -646,9 +646,9 @@ export class Runner extends React.Component {
     return (
       <div style={this.props.style}>
         <h1>{this.props.message}</h1>
-        { this.props.isMetric && 
+        { this.props.isMetric &&
           <h2>One Time I Ran {km} Kilometers!</h2> }
-        { !this.props.isMetric && 
+        { !this.props.isMetric &&
           <h2>One Time I Ran {miles} Miles!</h2> }
         <h3>Races I've Run</h3>
         <ul id="races">{races}</ul>
@@ -689,7 +689,7 @@ Think of a typical `<input type='text' />` element. It appears onscreen as a tex
 
 ```
 let input = document.querySelector('input[type="text"]');
- 
+
 let typedText = input.value; // input.value will be equal to whatever text is currently in the text box.
 ```
 The important thing here is that the `<input />` keeps track of its own text. You can ask it what its text is at any time, and it will be able to tell you.

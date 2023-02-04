@@ -17,7 +17,7 @@ Imagine a calendar app. One part of the app lists all of the events. Another par
 
 ### One-way data flow
 
-![One-way-data-flow-v2-transparent-bg](./One-way-data-flow-v2-transparent-bg.PNG)
+![One-way-data-flow-v2-transparent-bg](../images/One-way-data-flow-v2-transparent-bg.PNG)
 
 In most applications, there are three parts:
 
@@ -73,7 +73,7 @@ A reducer, or reducer function, is a plain JavaScript function that defines how 
 Here’s an example of a reducer function for a todo app:
 ```
 const initialState = [ 'Print trail map', 'Pack snacks', 'Summit the mountain' ];
- 
+
 const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'todos/addTodo': {
@@ -104,7 +104,8 @@ Some of the consistent rules to be followed while writing code of reducers are:
 4. A reducer must be a pure function and it must update state immutably. Being a pure function means they must not generate any side effects like making HTTP requests. And immutably means they must receive current state and make a copy and then make changes to it. So, it combination of Rule 2 and Rule 3.
 
 ### Store
-![](./Data Flow-pt1-1.png)
+![store](../images/Data-Flow-pt1-1.png)
+
 Redux uses a special object called the store. The store acts as a container for state, it provides a way to dispatch actions, and it calls the reducer when actions are dispatched. In nearly every Redux application, there will only be one store.
 
 We can rephrase our data flow using the new term:
@@ -124,7 +125,7 @@ Redux exports a valuable helper function for creating this store object called `
 
 ```
 import { createStore } from 'redux'
- 
+
 const initialState = 'on';
 const lightSwitchReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -134,14 +135,14 @@ const lightSwitchReducer = (state = initialState, action) => {
       return state;
   }
 }
- 
+
 const store = createStore(lightSwitchReducer); //store type: object
 ```
 
 ### `store.dispatch()`
-It can be used to dispatch an action to the store, indicating to update the state. It's only argument is `type` object. 
+It can be used to dispatch an action to the store, indicating to update the state. It's only argument is `type` object.
 ```
-const action = { type: 'actionDescriptor' }; 
+const action = { type: 'actionDescriptor' };
 store.dispatch(action);
 ```
 Each time store.dispatch() is called with an action object, the store’s reducer function will be executed with the same action object. Assuming that the action.type is recognized by the reducer, the state will be updated and returned.
@@ -150,7 +151,7 @@ Often, developers write dispatchers first so that reducer store is developed in 
 
 ```
 import { createStore } from 'redux';
- 
+
 const initialState = 'on';
 const lightSwitchReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -160,14 +161,14 @@ const lightSwitchReducer = (state = initialState, action) => {
       return state;
   }
 }
- 
+
 const store = createStore(lightSwitchReducer);
- 
+
 console.log(store.getState()); // Prints 'on'
- 
-store.dispatch({ type: 'toggle' }); 
+
+store.dispatch({ type: 'toggle' });
 console.log(store.getState()); // Prints 'off'
- 
+
 store.dispatch({ type: 'toggle' });
 console.log(store.getState()); // Prints 'on'
 ```
@@ -178,26 +179,26 @@ Like event listeners in javascript, this method binds events to every action. It
 
 ```
 // lightSwitchReducer(), toggle(), and store omitted...
- 
+
 const reactToChange = () => {
   console.log(`The light was switched ${store.getState()}!`);
 }
 const unsubscribe = store.subscribe(reactToChange);
- 
+
 store.dispatch(toggle());
 // reactToChange() is called, printing:
 // 'The light was switched off!'
- 
+
 store.dispatch(toggle());
 // reactToChange() is called, printing:
 // 'The light was switched on!'
- 
-unsubscribe(); 
+
+unsubscribe();
 // reactToChange() is now unsubscribed
- 
+
 store.dispatch(toggle());
 // no print statement!
- 
+
 console.log(store.getState()); // Prints 'off'
 ```
 
@@ -222,13 +223,13 @@ These same steps are followed when building an interface using React, Angular, o
 state = {
   todos: [
     {
-      id: 0, 
-      text: 'Complete the Learn Redux course', 
+      id: 0,
+      text: 'Complete the Learn Redux course',
       isCompleted: false
     },
     {
-      id: 1, 
-      text: 'Build a counter app', 
+      id: 1,
+      text: 'Build a counter app',
       isCompleted: true
     },
   ],
@@ -263,7 +264,7 @@ In the following code, we can see that first a copy of current state is made (th
 const recipesReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'allRecipes/loadData':
-      return { 
+      return {
         ...state,
         allRecipes: action.payload
       }
@@ -272,7 +273,7 @@ const recipesReducer = (state = initialState, action) => {
         ...state,
         searchTerm: ''
       }
-    
+
     case 'searchTerm/setSearchTerm':
       return {...state, searchTerm: action.payload} // fix me!
 
@@ -290,7 +291,7 @@ const recipesReducer = (state = initialState, action) => {
 
 ### Reducer Composition or Multiple Reducers
 
-A store can only be passed a single reducer. But, we can fragment our reducer based on slices and provide each slice with part of state(slice) and complete action. 
+A store can only be passed a single reducer. But, we can fragment our reducer based on slices and provide each slice with part of state(slice) and complete action.
 
 Individual slice reducers then are responsible for updating only one slice of the application and their results are combined by a `rootReducer` to form a single state object.
 
@@ -304,19 +305,19 @@ const initialTodos = [
 ];
 const todosReducer = (todos = initialTodos, action) => {
   switch (action.type) {
-    case 'todos/addTodo': 
+    case 'todos/addTodo':
       return [...todos, action.payload]
     case 'todos/toggleTodo':
       return todos.map(todo => {
-        return (todo.id === action.payload.id) ? 
-          { ...todo, completed: !todo.completed } : 
+        return (todo.id === action.payload.id) ?
+          { ...todo, completed: !todo.completed } :
           {...todo};
       });
     default:
       return todos;
   }
 };
- 
+
 // Handles only `state.filter`
 const initialFilter = 'SHOW_INCOMPLETE',
 const filterReducer = (filter = initialFilter, action) => {
@@ -326,7 +327,7 @@ const filterReducer = (filter = initialFilter, action) => {
     default:
       return filter;
 };
- 
+
 const rootReducer = (state = {}, action) => {
   const nextState = {
     todos: todosReducer(state.todos, action),
@@ -334,10 +335,10 @@ const rootReducer = (state = {}, action) => {
   };
   return nextState;
 };
- 
+
 const store = createStore(rootReducer);
 ```
-In this, 
+In this,
 * The `rootReducer` calls each slice reducer, regardless of the `action.type` with incoming action and appropriate slice of state as arguments.
 * The slice reducers then determine and update state and returns it.
 * The root reducer combines it in a new state and returns it.
@@ -346,9 +347,9 @@ In this,
 We can also use `combineReducers()` method to combine all reducers and pass its result as argument to `store`. For example, for last example,
 ```
 import { createStore, combineReducers } from 'redux'
- 
+
 // todosReducer and filterReducer omitted.
- 
+
 const reducers = {
     todos: todosReducer,
     filter: filterReducer
@@ -359,7 +360,7 @@ const store = createStore(rootReducer);
 
 ### File structure for redux
 
-![file structure](./file_structure_for_redux.PNG)
+![file structure](../images/file_structure_for_redux.PNG)
 
 Separate slices can be created and kept inside the folder of the specific features or view with name of their slices and then, in store, they can imported and combined.
 
@@ -367,7 +368,7 @@ Separate slices can be created and kept inside the folder of the specific featur
 
 ### Problems associated earlier
 1. We have to pass states and dispatch as props to highest component that is passed to all lower components making it an overhead. Also, called props drilling.
-2. A seperate render function has to be designed which renders and subscribed to actions. 
+2. A seperate render function has to be designed which renders and subscribed to actions.
 3. App is not scalable.
 
 ### `react-redux` - Core Redux API
@@ -380,9 +381,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './app/App.js';
 import { store } from './app/store.js';
- 
+
 import { Provider } from 'react-redux'
- 
+
 ReactDOM.render(
   <Provider store={store}>
     <App />
@@ -391,7 +392,7 @@ ReactDOM.render(
 );
 ```
 
-`ReactDOM.render()` is no longer inside a `render()` function and therefore nothing is subscribed to changes in the Redux store. 
+`ReactDOM.render()` is no longer inside a `render()` function and therefore nothing is subscribed to changes in the Redux store.
 
 ### Selectors
 The Redux store is provided to the React components of the application using the <Provider>component. Now, for each React component, you need to define which data from the store that component needs access to. This can be done by creating selector functions. These are not provided by the react-redux library but instead are user-defined.
@@ -408,11 +409,11 @@ A selector:
 ```
 // Select the current filter
 export const selectFilter = state => state.filter;
- 
+
 // Select the `text` from each todo in an array.
 export const selectTodoText = state => state.todos.map(
   todo => todo.text);
- 
+
 // Select the id values of completed todos in an array.
 export const selectIsCompleteIDs = state => state.todos.filter(
   todo => todo.isComplete).map(todo => todo.id)
@@ -429,10 +430,10 @@ These tasks are both accomplished by calling useSelector() inside a component de
 // Todos.js
 import { useSelector } from 'react-redux';
 import { selectTodos } from 'todosSlice.js';
- 
+
 export const Todos = () => {
   const todos = useSelector(selectTodos);
- 
+
   return (
     <p>{todos}</p>
   )
@@ -458,11 +459,11 @@ export const Todo = (props) => {
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTodo } from './todoSlice.js';
 import { removeTodo } from './todoSlice.js';
- 
+
 const Todo = () => {
   const todo = useSelector(selectTodo);
   const dispatch = useDispatch();
- 
+
   return (
     <button onClick={() => dispatch(removeTodo(todo))}>
       {todo}
@@ -503,11 +504,11 @@ Because of how effective it has proven to be at addressing the concerns of the v
 const addTodo = (todo) => {
  // logic omitted...
 }
- 
+
 const toggleTodo = (todo) => {
   // logic omitted...
 }
- 
+
 const todos = (state = [], action) => {
   // logic omitted...
 }
@@ -542,7 +543,7 @@ const options = {
    }
  }
 }
- 
+
 const todosSlice = createSlice(options);
 ```
 
@@ -566,9 +567,9 @@ const todosSlice = createSlice({
   initialState: [],
   reducers: {
     addTodo: (state, action) => {
-      state.push({ 
-        ...action.payload, 
-        completed: false 
+      state.push({
+        ...action.payload,
+        completed: false
       })
     },
     toggleTodo: (state, action) => {
@@ -602,7 +603,7 @@ const todosSlice = createSlice({
    }
  }
 })
- 
+
 /* Object returned by todosSlice */
 {
  name: 'todos',
@@ -649,7 +650,7 @@ const options = {
   // options fields omitted.
 }
 const todosSlice = createSlice(options);
- 
+
 /* Object returned by todosSlice */
 {
  name: 'todos',
@@ -679,18 +680,18 @@ Redux Toolkit has a configureStore() method that simplifies the store setup proc
 
 ```
 // rootReducer.js
- 
+
 import { combineReducers } from 'redux'
- 
+
 import todosReducer from './features/todos/todosSlice'
 import filtersReducer from './features/filters/filtersSlice'
- 
+
 const rootReducer = combineReducers({
  // Define a top-level state field named `todos`, handled by `todosReducer`
  todos: todosReducer,
  visibilityFilter: visibilityFilterReducer
 })
- 
+
 export default rootReducer
 ```
 
@@ -698,10 +699,10 @@ Now, let’s take a look at how we can refactor these two files using `configure
 
 ```
 import { configureStore } from '@reduxjs/toolkit'
- 
+
 import todosReducer from './features/todos/todosSlice'
 import filtersReducer from './features/filters/filtersSlice'
- 
+
 const store = configureStore({
  reducer: {
    // Define a top-level state field named `todos`, handled by `todosReducer`
@@ -709,7 +710,7 @@ const store = configureStore({
    filters: filtersReducer
  }
 })
- 
+
 export default store
 ```
 
@@ -737,13 +738,13 @@ import { createStore, applyMiddleware } from 'redux';
 import { middleware1, middleware2, middleware3 } from './exampleMiddlewares';
 import { exampleReducer } from './exampleReducer';
 import { initialState} from './initialState';
- 
+
 const store = createStore(
-  exampleReducer, 
-  initialState, 
+  exampleReducer,
+  initialState,
   applyMiddleware(
-    middleware1, 
-    middleware2, 
+    middleware1,
+    middleware2,
     middleware3
   )
 );
@@ -768,8 +769,8 @@ A thunk is a higher-order function that wraps computation we want to perform lat
 ```
 const add = (x,y) => {
   return () => {
-    return x + y; 
-  } 
+    return x + y;
+  }
 }
 ```
 Thunks are helpful because they allow us to bundle up bits of computation we want to delay into packages that can be passed around in code. Consider these two function calls, which rely on the add function above:
@@ -803,10 +804,10 @@ When we call `dispatch(increment())`, the value in our store immediately increas
 ```
 const incrementLater = async () => {
   setTimeout(() => {
-    dispatch(increment())    
-  }, 1000)    
+    dispatch(increment())
+  }, 1000)
 };
- 
+
 const asyncIncrement = () => {
   return incrementLater;
 }
@@ -862,11 +863,11 @@ For contrast, let’s walk through what happens when we dispatch that synchronou
 * Learned about Redux middleware and wrote your own simple logging middleware
 * Encountered thunks and learned about how valuable thunks are for deferring computation
 ```
-const remindMeLater = task => { 
+const remindMeLater = task => {
   return () => {
     remindMeTo(task)
-  } 
-} 
+  }
+}
 ```
 * Discovered redux-thunk, a middleware that allows you to write asynchronous action creators that return thunks instead of objects
 * Automatically enabled redux-thunk by using configureStore ```Discovered redux-thunk, a middleware that allows you to write asynchronous action creators that return thunks instead of objects```
@@ -896,7 +897,7 @@ In order to create these satisfying user experiences, we need to keep track of t
 
 ```
 import { fetchUser } from './api';
- 
+
 const fetchUserById = (id) => {
   return async (dispatch, getState) => {
     const payload = await fetchUser(id);
@@ -957,7 +958,7 @@ If you need to access these variables individually, you can use ES6 destructurin
 const searchUsers = createAsyncThunk(
     'users/searchUsers',
     async ({ firstName, lastName}, thunkAPI) => {
-        // perform the asynchronous search request here    
+        // perform the asynchronous search request here
     }
 )
 ```
@@ -993,7 +994,7 @@ To use our earlier example:
 ```
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { fetchUser } from './api'
- 
+
 const fetchUserById = createAsyncThunk(
   'users/fetchUserById', // action type
   async (userId, thunkAPI) => { // payload creator
@@ -1083,7 +1084,7 @@ export default allRecipesSlice.reducer;
 
 ```
 
-Other Example - 
+Other Example -
 ```
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 

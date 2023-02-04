@@ -26,4 +26,4 @@ The collection of technologies used to create the front-end and back-end of a we
 
 For example, the MEAN stack is a technology stack for building web applications that uses MongoDB, Express.js, AngularJS, and Node.js: MongoDB is used as the database, Node.js with Express.js for the rest of the back-end, and Angular is used as a front-end framework. While the LAMP Stack, sometimes considered the archetypal stack, uses Linux, Apache, MySQL, and PHP.
 
-![Back End](./back_end.svg)
+![Back End](./images/back_end.svg)

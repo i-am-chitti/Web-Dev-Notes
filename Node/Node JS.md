@@ -8,7 +8,7 @@ Node JS
 --------------------------------------
 ## Introduction
 
-The problem with native Javascript to run only in browser was overcome by NodeJS. Node can be used to write server-side applications with access to OS, file system, and everything else required to build fully-functional applications. 
+The problem with native Javascript to run only in browser was overcome by NodeJS. Node can be used to write server-side applications with access to OS, file system, and everything else required to build fully-functional applications.
 __Node.js is a Javascript runtime, environment that is written in C, C++, and Javascript and is built on the open-source V8 Javascript engine that also powers JS on browsers.__
 
 __Node is single threaded.__
@@ -19,7 +19,7 @@ Node uses 'an event driven, non-blocking I/O model'. Node JS is built well to ha
 
 ```
 const fs = require('fs');
- 
+
 fs.readFile('./script.js', function(error, data) {
   // error is null if no error occurred, but an Error object if it did
   if (error) {
@@ -32,7 +32,7 @@ fs.readFile('./script.js', function(error, data) {
 
 ### Runtime Environments
 
-There are two runtime environments that javascript is executed in and they have their own implementation of various javascript methods. 
+There are two runtime environments that javascript is executed in and they have their own implementation of various javascript methods.
 1. Node runtime: ```process.env.PWD``` prints the current working directory
 2. Browser's runtime: ```window.alert()``` executes only in browser.
 
@@ -40,7 +40,7 @@ There are two runtime environments that javascript is executed in and they have 
 
 REPL is an abbreviation for read–eval–print loop. It’s a program that loops, or repeatedly cycles, through three different states: a read state where the program reads input from a user, the eval state where the program evaluates the user’s input, and the print state where the program prints out its evaluation to a console. Then it loops through these states again.
 
-## `process` object 
+## `process` object
 
 Node has a global `process` object with useful methods and information about the current process.
 
@@ -59,17 +59,17 @@ Node provides an EventEmitter class which we can access by requiring in the even
 ```
 // Require in the 'events' core module
 let events = require('events');
- 
+
 // Create an instance of the EventEmitter class
 let myEmitter = new events.EventEmitter();
 
 let newUserListener = (data) => {
   console.log(`We have a new user: ${data}.`);
 };
- 
+
 // Assign the newUserListener function as the listener callback for 'new user' events
 myEmitter.on('new user', newUserListener)
- 
+
 // Emit a 'new user' event
 myEmitter.emit('new user', 'Lily Pad') //newUserListener will be invoked with 'Lily Pad'
 ```
@@ -113,7 +113,7 @@ const errorFirstCallback = (err, data)  => {
 ## Modular Programming
 
 Modules are reusable pieces of code in a file that can be exported and then imported for use in another file. A modular program is one whose components can be separated, used individually, and recombined to create a complex system.
-![Modules](./modules_in_node.png)
+![Modules](../images/modules_in_node.PNG)
 
 Benefits of isolating code into separate files called modules are:
 1. find, fix and debug easily
@@ -131,9 +131,9 @@ Every JavaScript file that runs in a Node environment is treated as a distinct m
 function celsiusToFahrenheit(celsius) {
   return celsius * (9/5) + 32;
 }
- 
+
 module.exports.celsiusToFahrenheit = celsiusToFahrenheit;
- 
+
 module.exports.fahrenheitToCelsius = function(fahrenheit) {
   return (fahrenheit - 32) * (5/9);
 };
@@ -144,13 +144,13 @@ module.exports.fahrenheitToCelsius = function(fahrenheit) {
 /* water-limits.js */
 const converters = require('./converters.js');
 const { celsiusToFahrenheit, farenheitToCelsius } = require('./converter.js'); // destructuring to be more selective
- 
+
 const freezingPointC = 0;
 const boilingPointC = 100;
- 
+
 const freezingPointF = converters.celsiusToFahrenheit(freezingPointC);
 const boilingPointF = converters.celsiusToFahrenheit(boilingPointC);
- 
+
 console.log(`The freezing point of water in Fahrenheit is ${freezingPointF}`);
 console.log(`The boiling point of water in Fahrenheit is ${boilingPointF}`);
 ```
@@ -166,7 +166,7 @@ For applying the module to HTMl, do it like this:
 export const toggleHiddenElement = (domElement) => {
   // logic omitted...
 }
- 
+
 export const changeToFunkyColor = (domElement) => {
   // logic omitted...
 }
@@ -180,9 +180,9 @@ import { greet as greetInHindi } from 'greeterHindi.js'
 Every module also has the option to export a single value to represent the entire module called the default export
 Exporting
 ```
-const resources = { 
-  valueA, 
-  valueB 
+const resources = {
+  valueA,
+  valueB
 }
 export { resources as default };
 export { resA, resB };
@@ -196,7 +196,7 @@ Importing
 // This will work...
 import resources from 'module.js'
 const { valueA, valueB } = resources;
- 
+
 // This will not work...
 import { valueA, valueB } from 'module.js'
 ```
@@ -213,11 +213,11 @@ One of the simplest uses of streams is reading and writing to files line-by-line
 ```
 const readline = require('readline');
 const fs = require('fs');
- 
+
 const myInterface = readline.createInterface({
   input: fs.createReadStream('text.txt')  // fs.createReadStream('text.txt') which will create a stream from the text.txt file.
 });
- 
+
 myInterface.on('line', (fileLine) => {
   console.log(`The line read: ${fileLine}`);
 });
@@ -229,10 +229,10 @@ We can create a writeable stream to a file using the `fs.createWriteStream()` me
 
 ```
 const fs = require('fs')
- 
+
 const fileStream = fs.createWriteStream('output.txt');
- 
-fileStream.write('This is the first line!'); 
+
+fileStream.write('This is the first line!');
 fileStream.write('This is the second line!');
 fileStream.end();
 ```
@@ -255,15 +255,15 @@ Let’s break down how the requestListener callback function works:
 
 ```
 const http = require('http');
- 
+
 let requestListener = (request, response) => {
   response.writeHead(200, {'Content-Type': 'text/plain' });
   response.write('Hello World!\n');
   response.end();
 };
- 
+
 const server = http.createServer(requestListener);
- 
+
 server.listen(3000);
 ```
 

@@ -16,7 +16,7 @@ Posts, Pages, Comments, Terms, Users are all considered nodes. And Nodes can hav
 
 For example a "Post" node might have a "title" that resolves to the value "Hello World".
 
-![](./graphql/nodes.png)
+![](../images/nodes.png)
 
 **An application data graph doesn't have a beginning or an end. It has nodes with fields, and WPGraphQL provides entry points to pluck nodes out of the Graph using GraphQL Queries.**
 
@@ -32,7 +32,7 @@ Take the following query, for example.
         name
       }
     }
-  } 
+  }
 }
 ```
 
@@ -60,7 +60,7 @@ The Query would return results like the following:
   }
 }
 ```
-![graph](./graphql/graph.png)
+![graph](../images/graph.png)
 
 Which, visually represented would look like the following, where the Post is returned, the 2 connected categories, and their names, but the request stops there, as it did not ask to traverse any deeper connections to the categories, or other connections of the Post, such as the connected Image.
 
@@ -76,7 +76,7 @@ Note: *Any plugin can only extend WPGraphQL schema by adding more fields but the
 - Strongly typed schema and introspection
   GraphQL enables tooling (like GraphiQL pictured above) because it's centered around a strongly typed schema. What this means is that every field in a GraphQL API declares what type of data it will return. Whether it's a String, Integer, Float, Boolean or another GraphQL Type, the type of data that can be returned is known ahead of time.
 
-- performance - 
+- performance -
 
   Let's start by looking at an example, and then we'll break it down.
 
@@ -192,7 +192,7 @@ query GetPostsEdges {
 }
 ```
 
-![](./graphql/list-of-posts.png)
+![](../images/list-of-posts.png)
 
 ### Filtering a list of posts
 
@@ -214,7 +214,7 @@ query GetPostsEdges {
 }
 ```
 
-![](./graphql/posts-by-authorId.png)
+![](../images/posts-by-authorId.png)
 
 #### Query posts by specific title
 Use `(where: {title: "foasfd"})`
@@ -244,10 +244,10 @@ Use `(where: {search: "graphql"})`
 }
 ```
 
-![](./graphql/posts-query-by-databaseId.png)
+![](../images/posts-query-by-databaseId.png)
 
 #### Single post by URI
-![posts-by-uri](./graphql/posts-query-by-uri.png)
+![posts-by-uri](../images/posts-query-by-uri.png)
 
 #### Single post by slug
 ```
@@ -284,10 +284,10 @@ mutation CREATE_POST {
 This Mutation will only succeed for users with proper capabilities to create posts (of the post type being created).
 
 Successful mutation
-![success-create-post](./graphql/posts-mutation-create-success.png)
+![success-create-post](../images/posts-mutation-create-success.png)
 
 Unsuccessful mutation
-![failed-create-post](./graphql/posts-mutation-create-not-allowed.png)
+![failed-create-post](../images/posts-mutation-create-not-allowed.png)
 
 #### Update post
 In order to update a post, ID must be known beforehand and to be provided as input.
@@ -308,10 +308,10 @@ mutation UPDATE_POST {
 }
 ```
 Successful mutation
-![update-success](./graphql/posts-mutation-update-success.png)
+![update-success](../images/posts-mutation-update-success.png)
 
 Unsuccessful mutation
-![failed-update-post](./graphql/posts-mutation-update-not-allowed.png)
+![failed-update-post](../images/posts-mutation-update-not-allowed.png)
 
 #### Delete post
 ID of post must be known and to be provided as input.
@@ -331,10 +331,10 @@ mutation DELETE_POST {
 ```
 
 Successful mutation
-![delete-success](./graphql/posts-mutation-delete-success.png)
+![delete-success](../images/posts-mutation-delete-success.png)
 
 Failed mutation
-![delete-failed](./graphql/posts-mutation-delete-not-allowed.png)
+![delete-failed](../images/posts-mutation-delete-not-allowed.png)
 
 ### GraphQL with custom post types
 
@@ -394,7 +394,7 @@ Suppose, custom post type is registered and `graphql_plural_name` is `docs`, the
   }
 }
 ```
-And if `graphql_single_name` is `doc`, it will be 
+And if `graphql_single_name` is `doc`, it will be
 ```
 {
   doc( id: "validIdGoesHere" ) {
@@ -449,7 +449,7 @@ In WordPress, Navigation Menus consist of 2 types of entities: Menus and MenuIte
 }
 ```
 
-![menu-items](./graphql/menus-query-items.png)
+![menu-items](../images/menus-query-items.png)
 
 #### Menu by name
 
@@ -611,7 +611,7 @@ Site settings can be queried in two different ways. As mentioned before, you reg
 }
 ```
 
-Will return 
+Will return
 
 ```
 {
@@ -657,7 +657,7 @@ For example, fields in the General Settings group can be accessed like so:
 }
 ```
 
-Will return 
+Will return
 
 ```
 {

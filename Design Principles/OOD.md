@@ -18,7 +18,7 @@ modified: '2022-09-08T07:06:28.111Z'
 
 ### Dependency Inversion Principle
 
-In traditional layer OOD design, high level modules consume low level modules directly. This has several drawbacks - 
+In traditional layer OOD design, high level modules consume low level modules directly. This has several drawbacks -
 
 - restricts re-use of high level modules
 - changes to low level module will require changes in high level modules as well
@@ -30,9 +30,9 @@ Dependency inversion principle states that
 
 The idea behind points A and B of this principle is that when designing the interaction between a high-level module and a low-level one, the interaction should be thought of as an abstract interaction between them. This not only has implications on the design of the high-level module, but also on the low-level one: the low-level one should be designed with the interaction in mind and it may be necessary to change its usage interface.
 
-#### Examples - 
+#### Examples -
 
-![DI](./dependency_inversion.png)
+![DI](../images/dependency_inversion.png)
 
 ```
 class Store {
@@ -68,5 +68,3 @@ store.purchaseBike(1);
 ```
 
 The store is a high level module and Stripe is a low level. Store is dependent on Stripe directly. If stripe's implementation changes, store has to change. Also, if there is a need of changing the payment provider say Paypal, then, Store has to re-written again.
-
-

@@ -110,8 +110,8 @@ CREATE statements allow us to create a new table in the database. You can use th
 
 ```
 CREATE TABLE celebs (
-   id INTEGER, 
-   name TEXT, 
+   id INTEGER,
+   name TEXT,
    age INTEGER
 );
 ```
@@ -123,7 +123,7 @@ The INSERT statement inserts a new row into a table.
 We can use the INSERT statement when you want to add new records. The statement below enters a record for Justin Bieber into the celebs table.
 
 ```
-INSERT INTO celebs (id, name, age) 
+INSERT INTO celebs (id, name, age)
 VALUES (1, 'Justin Bieber', 22);
 ```
 
@@ -140,7 +140,7 @@ SELECT name FROM celebs;
 The ALTER TABLE statement adds a new column to a table. You can use this command when you want to add columns to a table. The statement below adds a new column twitter_handle to the celebs table.
 
 ```
-ALTER TABLE celebs 
+ALTER TABLE celebs
 ADD COLUMN twitter_handle TEXT;
 ```
 
@@ -151,9 +151,9 @@ ADD COLUMN twitter_handle TEXT;
 The UPDATE statement edits a row in a table. You can use the UPDATE statement when you want to change existing records. The statement below updates the record with an id value of 4 to have the twitter_handle @taylorswift13.
 
 ```
-UPDATE celebs 
-SET twitter_handle = '@taylorswift13' 
-WHERE id = 4; 
+UPDATE celebs
+SET twitter_handle = '@taylorswift13'
+WHERE id = 4;
 ```
 
 ### Delete
@@ -161,7 +161,7 @@ WHERE id = 4;
 The DELETE FROM statement deletes one or more rows from a table. You can use the statement when you want to delete existing records. The statement below deletes all records in the celeb table with no twitter_handle:
 
 ```
-DELETE FROM celebs 
+DELETE FROM celebs
 WHERE twitter_handle IS NULL;
 ```
 
@@ -171,7 +171,7 @@ Constraints that add information about how a column can be used are invoked afte
 
 ```
 CREATE TABLE celebs (
-   id INTEGER PRIMARY KEY, 
+   id INTEGER PRIMARY KEY,
    name TEXT UNIQUE,
    date_of_birth TEXT NOT NULL,
    date_of_death TEXT DEFAULT 'Not Applicable'
@@ -207,7 +207,7 @@ Some important things to note:
 `DISTINCT` is used to return unique values in the output. It filters out all duplicate values in the specified column(s).
 
 ```
-SELECT DISTINCT tools 
+SELECT DISTINCT tools
 FROM inventory;
 ```
 
@@ -222,7 +222,7 @@ WHERE imdb_rating > 8;
 ### Like
 
 ```
-SELECT * 
+SELECT *
 FROM movies
 WHERE name LIKE 'Se_en';
 ```
@@ -479,7 +479,7 @@ When we perform a simple JOIN (often called an inner join) our result only inclu
 
 Consider the following animation, which illustrates an inner join of two tables on `table1.c2 = table2.c2`:
 
-![inner-join](./inner-join.webp)
+![inner-join](../images/inner-join.webp)
 
 If there are two tables and the primary key of one table is being referenced as foreign key in other table, we can directly join them using the below query:
 
@@ -495,7 +495,7 @@ What if we want to combine two tables and keep some of the un-matched rows?
 
 SQL lets us do this through a command called LEFT JOIN. A left join will keep all rows from the first table, regardless of whether there is a matching row in the second table.
 
-![left-join](./left-join.webp)
+![left-join](../images/left-join.webp)
 
 ```
 SELECT *
@@ -542,7 +542,7 @@ SELECT *
 FROM table2;
 ```
 
-### With 
+### With
 
 Our marketing department might want to know a bit more about our customers. For instance, they might want to know how many magazines each customer subscribes to. We can easily calculate this using our orders table:
 
@@ -643,7 +643,7 @@ CREATE TABLE talks (
 
 ### Alter column in PostgreSQL
 
-`NOT NULL` constraint can be added later after table 
+`NOT NULL` constraint can be added later after table
 creation.
 
 ```
@@ -680,7 +680,7 @@ Create table talks (
 
 --OR--
 
-ALTER TABLE talks 
+ALTER TABLE talks
 ADD CHECK (estimated_length > 0);
 ```
 
@@ -693,7 +693,7 @@ alter table attendees add check(standard_tickets_reserved + vip_tickets_reserved
 ### Unique constraint in postgreSQL
 
 ```
-ALTER TABLE attendees 
+ALTER TABLE attendees
 ADD UNIQUE (email);
 
 --Multiple columns--
@@ -790,7 +790,7 @@ There are quite a few types of constraints:
 
 [PostgreSQL Constraints DOCS](https://www.postgresql.org/docs/10/ddl-constraints.html)
 
-## CRUD 
+## CRUD
 
 It stands for Create, Read, Update, Delete.
 
@@ -848,7 +848,7 @@ This creates a new item with a name value of “Avocado Toast” and a price val
 Response:
 ```Status Code - 201 (CREATED)```
 
-Body - 
+Body -
 
 ```
 {
@@ -928,7 +928,7 @@ For example, if the price of Avocado Toast has gone up, we should go into the da
 Request:
 ```PUT http://www.myrestaurant.com/dishes/1223```
 
-Body - 
+Body -
 
 ```
 {
@@ -969,7 +969,7 @@ The functions to Create, Read, Update, and Delete resources are fundamental comp
 ```
 {
   "class": {
-    "id": 1    
+    "id": 1
     "name": “Pure Strength”,
     “trainer”: “Bicep Bob”,
     "duration": 1.5
@@ -1046,8 +1046,8 @@ As you get more practice with designing storage systems, incorporating CRUD oper
 
 ## Installing and Using PostgreSQL Locally
 
-![postgresql](./postgresql/postgresql (2).png)
-![postgresql](./postgresql/postgresql (3).png)
+![postgresql](../images/postgresql (2).png)
+![postgresql](../images/postgresql (3).png)
 
 Read complete [here](https://www.codecademy.com/articles/installing-and-using-postgresql-locally)
 
@@ -1161,7 +1161,7 @@ Nice work! By working on this project, you practiced writing SQL statements to c
 
 [here](https://www.postgresql.org/docs/current/tutorial-start.html)
 
-## Postgresql Exercises 
+## Postgresql Exercises
 
 [here](https://pgexercises.com/)
 
@@ -1208,7 +1208,7 @@ In this particular schema diagram, the symbols 1 and * on the lines denote a one
 * book and book_list
 * author and book_list
 
-![db sample](./db_sample.png)
+![db sample](../images/db_sample.png)
 
 ### Information Schema
 
@@ -1229,7 +1229,7 @@ WHERE
 
   --- Result ---
 
-  constraint_name | table_name | column_name 
+  constraint_name | table_name | column_name
 -----------------+------------+-------------
  recipe_pkey     | recipe     | id
 (1 row)
@@ -1265,15 +1265,15 @@ CREATE TABLE driver (
     name varchar(20),
     address varchar(100),
     date_of_birth date
-);      
- 
+);
+
 CREATE TABLE license (
     id integer PRIMARY KEY,
     state_issued varchar(20),
     date_issued date,
     date_expired  date,
     license_id char(20) REFERENCES driver(license_id) UNIQUE
-); 
+);
 ```
 
 2. One-to-many relationship
@@ -1283,8 +1283,8 @@ As opposed to one-to-one, a one-to-many relationship cannot be represented in a 
 For example, consider a table where we want one person to be able to have many email addresses. However, if there is a primary key in the table, such as id, the following rows will be rejected by the database.
 
 ```
-name   id (PK)     email       
-Cody   2531       cody@yahoo.com 
+name   id (PK)     email
+Cody   2531       cody@yahoo.com
 Cody   2531       cody@google.com
 Cody   2531       cody@bing.com
 ```
@@ -1359,6 +1359,4 @@ INNER JOIN table_two
 ON table_two.primary_key = joined_table.foreign_key_two
 ```
 
-![db_relationship](./db_relationship.png)
-
-
+![db_relationship](../images/db_relationship.png)

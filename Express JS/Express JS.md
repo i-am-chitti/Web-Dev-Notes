@@ -42,7 +42,7 @@ In addition to `.send()`, `.json()` can be used to explicitly send JSON-formatte
 
 ### Matching route paths
 
-![Route Match](./express_route_match.PNG)
+![Route Match](.../images/express_route_match.PNG)
 
 Express tries to match requests by route, meaning that if we send a request to `<server address>:<port number>/api-endpoint`, the Express server will search through any registered routes in order and try to match `/api-endpoint`.
 
@@ -107,7 +107,7 @@ When updating, many servers will send back the updated resource after the update
 
 Express matches routes using both path and HTTP method verb. In the diagram to the right, we see a request with a PUT verb and `/expressions` (remember that the query is not part of the route path). The path for the first route matches, but the method verb is wrong, so the Express server will continue to the next registered route. This route matches both method and path, and so its callback is called, the necessary updating logic is executed, and the response is sent.
 
-![express_http_verb_matching](./express_http_verb_matching.PNG)
+![express_http_verb_matching](../images/express_http_verb_matching.PNG)
 
 ### Post HTTP Verb
 
@@ -217,7 +217,7 @@ app.delete('/expressions/:id', (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`); 
+  console.log(`Listening on port ${PORT}`);
 });
 ```
 
@@ -235,7 +235,7 @@ To use a router, we mount it at a certain path using app.use() and pass in the r
 ```
 const express = require('express');
 const app = express();
- 
+
 const monsters = {
   '1': {
     name: 'godzilla',
@@ -246,11 +246,11 @@ const monsters = {
     age: 21
   }
 }
- 
+
 const monstersRouter = express.Router();
- 
+
 app.use('/monsters', monstersRouter);
- 
+
 monstersRouter.get('/:id', (req, res, next) => {
   const monster = monsters[req.params.id];
   if (monster) {
@@ -274,7 +274,7 @@ To do this with monstersRouter, we would create a new file `monsters.js` and mov
 // monsters.js
 const express = require('express');
 const monstersRouter = express.Router();
- 
+
 const monsters = {
   '1': {
     name: 'godzilla',
@@ -285,7 +285,7 @@ const monsters = {
     age: 21
   }
 }
- 
+
 monstersRouter.get('/:id', (req, res, next) => {
   const monster = monsters[req.params.id];
   if (monster) {
@@ -294,7 +294,7 @@ monstersRouter.get('/:id', (req, res, next) => {
     res.status(404).send();
   }
 });
- 
+
 module.exports = monstersRouter;
 ```
 
@@ -307,7 +307,7 @@ Our main.js file could then be refactored to import the monstersRouter:
 const express = require('express');
 const app = express();
 const monstersRouter = require('./monsters.js');
- 
+
 app.use('/monsters', monstersRouter);
 ```
 
@@ -337,22 +337,22 @@ app.use((req, res, next) => {
   console.log("A sorcerer approaches!");
   next();
 });
- 
+
 app.get('/magic/:spellname', (req, res, next) => {
   console.log("The sorcerer is casting a spell!");
   next();
 });
- 
+
 app.get('/magic/:spellname', (req, res, next) => {
   console.log(`The sorcerer has cast ${req.params.spellname}`);
   res.status(200).send();
 });
- 
+
 app.get('/magic/:spellname', (req, res, next) => {
   console.log("The sorcerer is leaving!");
 });
- 
-// Accessing http://localhost:4001/magic/fireball 
+
+// Accessing http://localhost:4001/magic/fireball
 // Console Output:
 // "A sorcerer approaches!"
 // "The sorcerer is casting a spell!"
@@ -389,29 +389,29 @@ we can provide a callback to many middlewares to avoid redundancy. See example b
 const authenticate = (req, res, next) => {
   ...
 };
- 
+
 const validateData = (req, res, next) => {
   ...
 };
- 
+
 const getSpell = (req, res, next) => {
   res.status(200).send(getSpellById(req.params.id));
 };
- 
+
 const createSpell = (req, res, next) => {
   createSpellFromRequest(req);
   res.status(201).send();
 };
- 
+
 const updateSpell = (req, res, next) => {
   updateSpellFromRequest(req);
   res.status(204).send();
 }
- 
+
 app.get('/spells/:id', authenticate, getSpell);
- 
+
 app.post('/spells', authenticate, validateData, createSpell);
- 
+
 app.put('/spells/:id', authenticate, validateData, updateSpell);
 ```
 
@@ -468,7 +468,7 @@ app.use((req, res, next) => {
   }
   next();
 });
- 
+
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   res.status(status).send(err.message);
@@ -489,7 +489,7 @@ app.get('/sorcerers/:sorcererName', (req, res, next) => {
   const sorcerer = Sorcerers[req.params.sorcererName];
   res.send(sorcerer.info);
 });
- 
+
 app.get('/sorcerers/:sorcererName/spellhistory', (req, res, next) => {
   const sorcerer = Sorcerers[req.params.sorcererName];
   const spellHistory = Spells[sorcerer.id].history;
@@ -539,24 +539,24 @@ When we’re building web endpoints, we might want to access some property of a 
 ```
 const sorcererRouter = express.Router();
 const familiarRouter = express.Router({mergeParams: true});
- 
+
 sorcererRouter.use('/:sorcererId/familiars', familiarRouter);
- 
+
 sorcererRouter.get('/', (req, res, next) => {
   res.status(200).send(Sorcerers);
   next();
 });
- 
+
 sorcererRouter.param('sorcererId', (req, res, next, id) => {
-  const sorcerer = getSorcererById(id);   
+  const sorcerer = getSorcererById(id);
   req.sorcerer = sorcerer;
   next();
 });
- 
+
 familiarRouter.get('/', (req, res, next) => {
   res.status(200).send(`Sorcerer ${req.sorcerer} has familiars ${getFamiliars(sorcerer)}`);
 });
- 
+
 app.use('/sorcerer', sorcererRouter);
 ```
 
@@ -565,20 +565,20 @@ In the code above we define two endpoints: `/sorcerer` and `/sorcerer/:sorcererI
 
 ## CORS
 
-![cors1](./cors (2).png)
-![cors1](./cors (3).png)
-![cors1](./cors (4).png)
-![cors1](./cors (5).png)
-![cors1](./cors (6).png)
-![cors1](./cors (7).png)
-![cors1](./cors (8).png)
-![cors1](./cors (9).png)
-![cors1](./cors (10).png)
-![cors1](./cors (11).png)
-![cors1](./cors (12).png)
-![cors1](./cors (13).png)
-![cors1](./cors (14).png)
-![cors1](./cors (1).png)
+![cors2](../images/cors-(2).png)
+![cors3](../images/cors-(3).png)
+![cors4](../images/cors-(4).png)
+![cors5](../images/cors-(5).png)
+![cors6](../images/cors-(6).png)
+![cors7](../images/cors-(7).png)
+![cors8](../images/cors-(8).png)
+![cors9](../images/cors-(9).png)
+![cors10](../images/cors-(10).png)
+![cors11](../images/cors-(11).png)
+![cors12](../images/cors-(12).png)
+![cors13](../images/cors-(13).png)
+![cors14](../images/cors-(14).png)
+![cors15](../images/cors-(1).png)
 
 
 ## API Documentation

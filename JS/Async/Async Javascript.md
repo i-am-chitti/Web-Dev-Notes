@@ -4,11 +4,11 @@ created: '2021-06-15T11:49:37.263Z'
 modified: '2022-03-27T12:07:01.412Z'
 ---
 
-# Async Javascript  
+# Async Javascript
 
 [Ajax Documentation](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX)
 
-There are four parts of a browser. 
+There are four parts of a browser.
 1. Javascript consisting of memory heap and call stack
 2. Web APIs like setTimeout, DOM, XMLHttpRequest etc
 3. Event Queue or callback queue
@@ -18,7 +18,7 @@ An asynchronous operation is one that allows the computer to “move on” to ot
 
 Js is single threaded. It means that it will execute next process untill it finishes with the current process.
 
-Let's understand behavior of browser on a asynchronous operation. Consider the code - 
+Let's understand behavior of browser on a asynchronous operation. Consider the code -
 ```
 console.log('1'); // Line 1
 setTimeout(() => {
@@ -52,7 +52,7 @@ let response = downloadImage();
 displayImage(response.image);  //it should be hold untill image is downloaded completely
 ```
 
-For such works, we need asynchronous methodology. It facilitates asynchronous behaviour in the execution using some type of callback mechanisms. As callback means *called back* will be executed once it finishes with other process like, displaying an image or destructuring JSON object once it is downloaded. 
+For such works, we need asynchronous methodology. It facilitates asynchronous behaviour in the execution using some type of callback mechanisms. As callback means *called back* will be executed once it finishes with other process like, displaying an image or destructuring JSON object once it is downloaded.
 
 __Note__ : Not all callbacks are asynchronous. Some are synchronous for eg, Array.forEach, Array.indexOf, etc
 
@@ -121,7 +121,7 @@ setTimeout() executes a particular block of code once after a specified time has
   ```
 
 2. ```setInterval()```
-This works in a very similar way to setTimeout(), except that the function you pass as the first parameter is executed repeatedly at no less than the number of milliseconds given by the second parameter apart, rather than once. 
+This works in a very similar way to setTimeout(), except that the function you pass as the first parameter is executed repeatedly at no less than the number of milliseconds given by the second parameter apart, rather than once.
 ```
 function displayTime() {
    let date = new Date();
@@ -143,7 +143,7 @@ Promises are objects that represent the eventual outcome of an asynchronous oper
 
 All promises eventually settle, enabling us to write logic for what to do if the promise fulfills or if it rejects.
 
-![promises](./promise.png)
+![promises](../../images/promise.PNG)
 
 Constructing a Promise
 
@@ -152,7 +152,7 @@ const executorFunction = (resolve, reject) => {
   if (someCondition) {
       resolve('I resolved!');
   } else {
-      reject('I rejected!'); 
+      reject('I rejected!');
   }
 }
 const myFirstPromise = new Promise(executorFunction);
@@ -174,15 +174,15 @@ let prom = new Promise((resolve, reject) => {
     reject('Ohhh noooo!');
   }
 });
- 
+
 const handleSuccess = (resolvedValue) => {
   console.log(resolvedValue);
 };
- 
+
 const handleFailure = (rejectionReason) => {
   console.log(rejectionReason);
 };
- 
+
 prom.then(handleSuccess, handleFailure);
 ```
 
@@ -261,7 +261,7 @@ If we want a number of tasks to be done asynchronously without worrying about th
 
 ```
 let myPromises = Promise.all([returnsPromOne(), returnsPromTwo(), returnsPromThree()]);
- 
+
 myPromises
   .then((arrayOfValues) => {
     console.log(arrayOfValues);
@@ -281,7 +281,7 @@ The async keyword is used to write functions that handle asynchronous actions. W
 async function myFunc() {
   // Function body here
 };
- 
+
 myFunc();
 ```
 
@@ -289,7 +289,7 @@ myFunc();
 const myFunc = async () => {
   // Function body here
 };
- 
+
 myFunc();
 ```
 
@@ -300,10 +300,10 @@ myFunc();
 * If a promise is returned from the function, it will simply return that promise
 
 ```
-async function fivePromise() { 
+async function fivePromise() {
   return 5;
 }
- 
+
 fivePromise()
 .then(resolvedValue => {
     console.log(resolvedValue);
@@ -366,12 +366,12 @@ async function noAwait() {
  let value = myPromise();
  console.log(value);
 }
- 
+
 async function yesAwait() {
  let value = await myPromise();
  console.log(value);
 }
- 
+
 noAwait(); // Prints: [object Promise]
 yesAwait(); // Prints: Yay, I resolved!
 ```
@@ -432,13 +432,13 @@ If any promise gets rejected, then it will throw error if no catch block is avai
 async function asyncPromAll() {
   const resultArray = await Promise.all([asyncTask1(), asyncTask2(), asyncTask3(), asyncTask4()]);
   for (let i = 0; i<resultArray.length; i++){
-    console.log(resultArray[i]); 
+    console.log(resultArray[i]);
   }
 }
 ```
 
 ### Handling errors
-Using `try...catch`, we can catch both asynchronous and synchronous errors. Also, we can use traditional `.catch()` method on `async` functions as they always return a promise 
+Using `try...catch`, we can catch both asynchronous and synchronous errors. Also, we can use traditional `.catch()` method on `async` functions as they always return a promise
 ```
 const hostDinnerParty = async () => {
   try {
@@ -456,7 +456,7 @@ OR
 hostDinnerParty().catch((rejectValue) => console.log(rejectValue));
 ```
 
-### Benefits of `async/await` over native `.then()` 
+### Benefits of `async/await` over native `.then()`
 
 * the `async...await` version more closely resembles synchronous code, which helps developers maintain and debug their code.
 * `async...await` syntax also makes it easy to store and refer to resolved values from promises further back in our chain which is a much more difficult task with native promise syntax. So, we can directly refer to resolved values.
@@ -465,7 +465,7 @@ hostDinnerParty().catch((rejectValue) => console.log(rejectValue));
 ### Parallel, sequence and race in promises
 
 ```
-const promisify = (item, delay) => 
+const promisify = (item, delay) =>
 	new Promise((resolve) => setTimeout(() => resolve(item), delay));
 
 const a = () => promisify('a', 100);
@@ -486,7 +486,7 @@ sequence().then(console.log);
 async function parallel() {
 	const promises = [a(), b(), c()];
 	const [resA, resB, resC] = await Promise.all(promises);
-	// resA, resB, resC will be available only when every promise in 
+	// resA, resB, resC will be available only when every promise in
 	// array is resolved
 	return `parallel is done: ${resA} ${resB} ${resC}`;
 }
@@ -511,14 +511,14 @@ Here is a comparision among callbacks, native promises and async...await methods
 
 ### Runtime Concepts
 
-![Js engine](./js_engine.png)
+![Js engine](../../images/js_engine.PNG)
 
 1. Stack: function calls form a stack
 2. Heap: Objects are allocated in a heap which is just a name to denote a large (mostly unstructured) region of memory.
 3. Queue: A JavaScript runtime uses a message queue, which is a list of messages to be processed. Each message has an associated function which gets called in order to handle the message.
 
 So, when engine gets a asynchronous code, be it `setTimeout()`, it waits for the delayed duration in WEB APIs, then, its callback is pushed into the queue. Now, __untill the stack become empty, none of the task in message queue is executed__. So, the duration specified in its implementation is the minimum time after which it will be executed.
-Similarly, other asynchronous operations are performed. It does its job in Web APIs area, after completion, it is pushed into queue. Event loop will push it into stack and execute it. 
+Similarly, other asynchronous operations are performed. It does its job in Web APIs area, after completion, it is pushed into queue. Event loop will push it into stack and execute it.
 
 
 ## AJAX Requests
@@ -526,12 +526,12 @@ Similarly, other asynchronous operations are performed. It does its job in Web A
 Asynchronous JavaScript and XML (AJAX), enables requests to be made after the initial page load. Initially, AJAX was used only for XML formatted data, now it can be used to make requests that have many different formats.
 `XMLHttpRequest` was introduced by Microsoft.
 
-![XHR Requests](./xhr_get_diagram.svg)
+![XHR Requests](../../images/xhr_get_diagram.svg)
 
 * Query String: A query string is separated from the URL using a ? character. After ?, you can then create a parameter which is a key value pair joined by a =.
 `https://api.datamuse.com/words?key=value&anotherKey=anotherValue`
 
-![XHR Post](./xhr_post_diagram.svg)
+![XHR Post](../../images/xhr_post_diagram.svg)
 
 ## Fetch Requests
 
@@ -540,19 +540,19 @@ Also, using `async...await` with fetch makes asynchrounous calls with synchronou
 
 ### Fetch get requests
 
-![fetch](./fetch_get.png)
+![fetch](../../images/fetch_get.PNG)
 
 ### fetch post requests
 
-![fetch](./fetch_post.png)
+![fetch](./../images/fetch_post.PNG)
 
 ### fetch get async requests
 
-![fetch async](./fetch_get_async.png)
+![fetch async](../../images/fetch_get_async.PNG)
 
 ### fetch post async requests
 
-![fetch post async](./fetch_post_async.png)
+![fetch post async](../../images/fetch_post_async.PNG)
 
 Reference for XMLHttpRequest and Fetch API [Click Here](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data)
 
@@ -560,10 +560,10 @@ Reference for XMLHttpRequest and Fetch API [Click Here](https://developer.mozill
 
 Q. Output of the below code
 ```
-const asyncHello = new Promise((resolve, reject) => { 
-    setTimeout(resolve, 1000, 'Hello!'); 
-}); 
- 
+const asyncHello = new Promise((resolve, reject) => {
+    setTimeout(resolve, 1000, 'Hello!');
+});
+
 console.log(typeof asyncHello);
 ```
 Options:
@@ -576,12 +576,12 @@ Q. True or False: promise1 and promise2 both produce the same output.
 ```
 const examplePromise1 = new Promise((resolve, reject) => { reject('Uh-oh!') });
 const examplePromise2 = new Promise((resolve, reject) => { reject('Uh-oh!') });
- 
+
 const onFulfill = value => {console.log(value)};
 const onReject = reason => {console.log(reason)};
- 
+
 const promise1 = examplePromise1.then(onFulfill, onReject);
- 
+
 const promise2 = examplePromise2.then(onFulfill).catch(onReject);
 ```
 
@@ -606,10 +606,10 @@ The operations at each level might take time to be executed like deciding toppin
 
 Q. What will be output?
 ```
-async function myFunction() { 
+async function myFunction() {
   return 'hello world';
 }
- 
+
 myFunction()
 .then((resolvedValue) => {
   console.log(resolvedValue);

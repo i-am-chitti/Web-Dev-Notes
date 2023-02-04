@@ -8,7 +8,7 @@ modified: '2022-07-16T12:34:22.330Z'
 
 ## [The Scale Cube](https://microservices.io/articles/scalecube.html)
 
-![3 dimensions to scaling](./Microservice/scaling.png)
+![3 dimensions to scaling](../images/scaling.png)
 
 ### X-axis scaling
 X-axis scaling consists of running multiple copies of an application behind a load balancer. If there are N copies then each copy handles 1/N of the load. This is a simple, commonly used approach of scaling an application.
@@ -39,7 +39,7 @@ Z-axis scaling has some drawbacks.
 
 Building an app with monolithic architecture means all different components are packed into a single bundle and deployed. Like a single JAVA WAR file or a single directory of NodeJS code.
 
-![monolithic architecture](./Microservice/monolithic.png)
+![monolithic architecture](../images/monolithic.png)
 
 ### Context
 You are developing a server-side enterprise application. It must support a variety of different clients including desktop browsers, mobile browsers and native mobile applications. The application might also expose an API for 3rd parties to consume. It might also integrate with other applications via either web services or a message broker. The application handles requests (HTTP requests and messages) by executing business logic; accessing a database; exchanging messages with other systems; and returning a HTML/JSON/XML response. There are logical components corresponding to different functional areas of the application.
@@ -68,6 +68,3 @@ Loosely coupled with other services - enables a team to work independently the m
 Independently deployable - enables a team to deploy their service without having to coordinate with other teams
 Capable of being developed by a small team - essential for high productivity by avoiding the high communication head of large teams
 Services communicate using either synchronous protocols such as HTTP/REST or asynchronous protocols such as AMQP. Services can be developed and deployed independently of one another. Each service has its own database in order to be decoupled from other services. Data consistency between services is maintained using the Saga pattern
-
-
-
