@@ -2,6 +2,8 @@
 
 These are my personal notes that I have prepared during learning web development.
 
+[Here](https://deepakkumar.notion.site/Web-Dev-Topics-a8e263c677c541a3acb2daa68e58da4d) is the list of topics that you should at least have knowledge to get started professionally in web development field.
+
 ## Navigator
 
 - [HTML](HTML/README.md)
