@@ -6,6 +6,8 @@ modified: '2022-07-28T20:20:15.160Z'
 
 # GraphQL
 
+While query fields are executed in parallel, mutation fields run in series, one after the other. This means that if we send two incrementCredits mutations in one request, the first is guaranteed to finish before the second begins, ensuring that we don't end up with a race condition with ourselves.
+
 ## WordPress GraphQL
 
 WPGraphQL treats WordPress data like an application data graph.

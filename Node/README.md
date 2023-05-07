@@ -30,6 +30,26 @@ fs.readFile('./script.js', function(error, data) {
 });
 ```
 
+### Node JS Architecture
+
+[Reference Video](https://www.youtube.com/watch?v=dT5QizZIDFw&list=PLEfl6gYIDWgYmMGpQYYvc49escwlGvDUa)
+
+It's a runtime environment which is powered by V8 Javascript engine that compiles the Javascript code to machine code and `libuv` library that offers ways to access OS, network calls, file system etc. `libuv` library also has event loop and thread pool. This library is written in C++. V8 engine is written in JS and C++.
+
+Node JS runs as a process (instance of a program under execution) and is single threaded (sequence of instructions). So, whether there are 10 users or millions of users, they are served by this single thread.
+
+Here is how a node program is executed -
+
+- Initialize the program
+- Execute the 'top level' code
+- require modules
+- register event callbacks
+- start event loop.
+
+Now, event loop does the work. But works which are blocking in nature or expensive are offloaded to thread pool. Thread Pool is provided by `libuv` library which itself run as a process. This process has at least 4 threads (can be upto 128). These 4 threads takes the offloaded work and do them. Some tasks - file system calls, cryptography, compression, DNS lookups.
+
+Event loop is the heart of NodeJS.
+
 ### Runtime Environments
 
 There are two runtime environments that javascript is executed in and they have their own implementation of various javascript methods.

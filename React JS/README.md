@@ -699,3 +699,835 @@ The fact that `<input />` keeps track of information makes it an uncontrolled co
 A controlled component, on the other hand, has no memory. If you ask it for information about itself, then it will have to get that information through props. Most React components are controlled.
 
 __In React, when you give an `<input />` a value attribute, then something strange happens: the `<input />` BECOMES controlled. It stops using its internal storage.__ This is a more ‘React’ way of doing things.
+
+### Deep Concepts
+
+#### Why do multiple JSX tags need to be wrapped?
+
+JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. You can’t return two objects from a function without wrapping them into an array. This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment.
+
+#### camelCase all most of the things!
+
+JSX turns into JavaScript and attributes written in JSX become keys of JavaScript objects. In your own components, you will often want to read those attributes into variables. But JavaScript has limitations on variable names. For example, their names can’t contain dashes or be reserved words like class.
+
+`
+For historical reasons, aria-* and data-* attributes are written as in HTML with dashes.`
+
+#### Rules of keys
+
+- Keys must be unique among siblings. However, it’s okay to use the same keys for JSX nodes in different arrays.
+- Keys must not change or that defeats their purpose! Don’t generate them while rendering.
+
+#### Strict Mode
+
+React offers a “Strict Mode” in which it calls each component’s function twice during development. By calling the component functions twice, Strict Mode helps find components that break these rules.
+
+Notice how the original example displayed “Guest #2”, “Guest #4”, and “Guest #6” instead of “Guest #1”, “Guest #2”, and “Guest #3”. The original function was impure, so calling it twice broke it. But the fixed pure version works even if the function is called twice every time. Pure functions only calculate, so calling them twice won’t change anything—just like calling double(2) twice doesn’t change what’s returned, and solving y = 2x twice doesn’t change what y is. Same inputs, same outputs. Always.
+
+Strict Mode has no effect in production, so it won’t slow down the app for your users. To opt into Strict Mode, you can wrap your root component into <React.StrictMode>. Some frameworks do this by default.
+
+#### Keeping components pure
+
+Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!
+- Mind its own business
+- same input, same output
+
+React is designed around this concept. React assumes that every component you write is a pure function. This means that React components you write must always return the same JSX given the same inputs.
+
+
+##### Local Mutation
+
+```
+function Cup({ guest }) {
+  return <h2>Tea cup for guest #{guest}</h2>;
+}
+
+export default function TeaSet() {
+  return (
+    <>
+      <Cup guest={1} />
+      <Cup guest={2} />
+      <Cup guest={3} />
+    </>
+  );
+}
+```
+
+
+The component changed a preexisting variable while rendering. This is often called a “mutation” to make it sound a bit scarier. Pure functions don’t mutate variables outside of the function’s scope or objects that were created before the call—that makes them impure!
+
+However, it’s completely fine to change variables and objects that you’ve just created while rendering. It’s fine because you’ve created them during the same render, inside TeaGathering. No code outside of TeaGathering will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret.
+
+#### Side Effects
+
+These changes—updating the screen, starting an animation, changing the data—are called side effects. They’re things that happen “on the side”, not during rendering.
+
+In React, side effects usually belong inside event handlers. Event handlers are functions that React runs when you perform some action—for example, when you click a button. Even though event handlers are defined inside your component, they don’t run during rendering! So event handlers don’t need to be pure.
+
+#### Render Meaning
+
+#### Analogy
+
+Imagine that your components are cooks in the kitchen, assembling tasty dishes from ingredients. In this scenario, React is the waiter who puts in requests from customers and brings them their orders.
+
+#### Phases
+
+1. **Triggering** a render (delivering the guest’s order to the kitchen)
+2. **Rendering** the component (preparing the order in the kitchen)
+3. **Committing** to the DOM (placing the order on the table)
+
+#### Step 1: Trigger a render
+
+There are two reasons for a component to render:
+
+1. It’s the component’s initial render.
+2. The component’s (or one of its ancestors’) state has been updated.
+
+##### Initial Render
+
+When your app starts, you need to trigger the initial render. Frameworks and sandboxes sometimes hide this code, but it’s done by calling createRoot with the target DOM node, and then calling its render method with your component:
+
+```
+import Image from './Image.js';
+import { createRoot } from 'react-dom/client';
+
+const root = createRoot(document.getElementById('root'))
+root.render(<Image />);
+```
+
+##### State Update - Re-render
+
+Once the component has been initially rendered, you can trigger further renders by updating its state with the set function. Updating your component’s state automatically queues a render. (You can imagine these as a restaurant guest ordering tea, dessert, and all sorts of things after putting in their first order, depending on the state of their thirst or hunger.)
+
+
+#### Step 2 : React renders a component
+
+**“Rendering” is React calling your components.**
+
+- On initial render, React will call the root component.
+- For subsequent renders, React will call the function component whose state update triggered the render.
+
+This process is recursive: if the updated component returns some other component, React will render that component next, and if that component also returns something, it will render that component next, and so on. The process will continue until there are no more nested components and React knows exactly what should be displayed on screen.
+
+React will calculate which of their properties, if any, have changed since the previous render. It won’t do anything with that information until the next step, the commit phase.
+
+
+> The default behavior of rendering all components nested within the updated component is not optimal for performance if the updated component is very high in the tree. If you run into a performance issue, there are several opt-in ways to solve it described in the Performance section. Don’t optimize prematurely!
+
+#### Step 3 : React commits changes to DOM
+
+After rendering (calling) your components, React will modify the DOM.
+
+- For the initial render, React will use the appendChild() DOM API to put all the DOM nodes it has created on screen.
+- For re-renders, React will apply the minimal necessary operations (calculated while rendering!) to make the DOM match the latest rendering output.
+
+React only changes the DOM nodes if there’s a difference between renders. For example, here is a component that re-renders with different props passed from its parent every second. Notice how you can add some text into the `<input>`, updating its value, but the text doesn’t disappear when the component re-renders:
+
+```
+export default function Clock({ time }) {
+  return (
+    <>
+      <h1>{time}</h1>
+      <input />
+    </>
+  );
+}
+```
+
+React only updates the content of `<h1>` with the new time. It sees that the `<input>` appears in the JSX in the same place as last time, so React doesn’t touch the `<input>`—or its value!
+
+
+After rendering is done and React updated the DOM, the browser will repaint the screen. Although this process is known as “browser rendering”, we’ll refer to it as “painting” to avoid confusion throughout the docs.
+
+__React does not touch the DOM if the rendering result is the same as last time__
+
+### State as Snapshot
+
+Updating the state triggers a re-render ie, the component is called again.  The JSX you return from that function is like a snapshot of the UI in time. Its props, event handlers, and local variables were all calculated **using its state at the time of the render**.
+
+When React re-renders a component:
+
+1. React calls your function again.
+2. Your function returns a new JSX snapshot.
+3. React then updates the screen to match the snapshot you’ve returned.
+
+As a component’s memory, state is not like a regular variable that disappears after your function returns. State actually “lives” in React itself—as if on a shelf!—outside of your function. When React calls your component, it gives you a snapshot of the state for that particular render. Your component returns a snapshot of the UI with a fresh set of props and event handlers in its JSX, all calculated **using the state values from that render**!
+
+```
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 1);
+        setNumber(number + 1);
+        setNumber(number + 1);
+      }}>+3</button>
+    </>
+  )
+}
+```
+
+Try guessing how what will be number finally?
+
+**Setting state only changes it for the next render**. During the first render, `number` was `0`. This is why, in that render’s `onClick` handler, the value of `number` is still `0` even after `setNumber(number + 1)` was called:
+
+```
+<button onClick={() => {
+  setNumber(number + 1);
+  setNumber(number + 1);
+  setNumber(number + 1);
+}}>+3</button>
+```
+
+Here is what this button’s click handler tells React to do:
+
+1. `setNumber(number + 1)`: `number` is 0 so `setNumber(0 + 1)`.
+React prepares to change `number` to 1 on the next render.
+2. `setNumber(number + 1)`: `number` is 0 so `setNumber(0 + 1)`.
+React prepares to change `number` to 1 on the next render.
+3. `setNumber(number + 1)`: `number` is 0 so `setNumber(0 + 1)`.
+React prepares to change `number` to 1 on the next render.
+
+Even though you called `setNumber(number + 1)` three times, in this render’s event handler number is always 0, so you set the state to 1 three times. This is why, after your event handler finishes, React re-renders the component with number equal to 1 rather than 3.
+
+#### State over time
+
+```
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 5);
+		setTimeout(() => {
+          alert(number);
+        }, 3000);
+        alert(number);
+      }}>+5</button>
+    </>
+  )
+}
+```
+
+Try guessing what will be alerted?
+
+```
+setNumber(0 + 5);
+setTimeout(() => {
+  alert(0);
+}, 3000);
+```
+
+The state stored in React may have changed by the time the alert runs, but it was scheduled using a snapshot of the state at the time the user interacted with it!
+
+**React keeps the state values “fixed” within one render’s event handlers**. You don’t need to worry whether the state has changed while the code is running.
+
+##### Recap
+
+- Setting state requests a new render.
+- React stores state outside of your component, as if on a shelf.
+- When you call useState, React gives you a snapshot of the state for that render.
+Variables and event handlers don’t “survive” re-renders. Every render has its own event handlers.
+- Every render (and functions inside it) will always “see” the snapshot of the state that React gave to that render.
+- You can mentally substitute state in event handlers, similarly to how you think about the rendered JSX.
+- Event handlers created in the past have the state values from the render in which they were created.
+
+### Queuing a Series of State Updates
+
+```
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 1);
+        setNumber(number + 1);
+        setNumber(number + 1);
+      }}>+3</button>
+    </>
+  )
+}
+```
+
+Consider this snippet, you could expect that number would be increased by 3 but as we discussed about the snapshot, it will be only 1. Other than snapshot, there is one more factor at play.
+
+**React waits until all code in the event handlers has run before processing your state updates**. This is why the re-render only happens after all these `setNumber()` calls.
+
+This might remind you of a waiter taking an order at the restaurant. A waiter doesn’t run to the kitchen at the mention of your first dish! Instead, they let you finish your order, let you make changes to it, and even take orders from other people at the table.
+
+This lets you update multiple state variables—even from multiple components—without triggering too many re-renders. But this also means that the UI won’t be updated until after your event handler, and any code in it, completes. This behavior, also known as **batching**, makes your React app run much faster. It also avoids dealing with confusing “half-finished” renders where only some of the variables have been updated.
+
+**React does not batch across multiple intentional events like clicks—each click is handled separately**. Rest assured that React only does batching when it’s generally safe to do. This ensures that, for example, if the first button click disables a form, the second click would not submit it again.
+
+
+#### Updating the same state multiple times before next render
+
+If you would like to update the same state variable multiple times before the next render, instead of passing the next state value like `setNumber(number + 1)`, **you can pass a function that calculates the next state based on the previous one in the queue, like `setNumber(n => n + 1)`**. This is called updater function. It is a way to tell React to “do something with the state value” instead of just replacing it.
+
+```
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(n => n + 1);
+        setNumber(n => n + 1);
+        setNumber(n => n + 1);
+      }}>+3</button>
+    </>
+  )
+}
+```
+
+This will update the state by +3 always.
+
+See this snippet -
+
+```
+<button onClick={() => {
+  setNumber(number + 5);
+  setNumber(n => n + 1);
+}}>
+```
+
+![State](../images/queuing_state_updates.png)
+
+See this snippet -
+
+```
+<button onClick={() => {
+  setNumber(number + 5);
+  setNumber(n => n + 1);
+  setNumber(42);
+}}>
+```
+
+![](../images/queuing_state_updates2.png)
+
+##### Summarize
+
+- An updater function (e.g. `n => n + 1`) gets added to the queue.
+- Any other value (e.g. number 5) adds “replace with `5`” to the queue, ignoring what’s already queued.
+
+##### Naming Convention
+
+It’s common to name the updater function argument by the first letters of the corresponding state variable:
+
+```
+setEnabled(e => !e);
+setLastName(ln => ln.reverse());
+setFriendCount(fc => fc * 2);
+```
+
+##### Recap
+
+- Setting state does not change the variable in the existing render, but it requests a new render.
+- React processes state updates after event handlers have finished running. This is called batching.
+- To update some state multiple times in one event, you can use setNumber(n => n + 1) updater function.
+
+### Updating object States
+
+String, number, booleans are immutable. But objects and arrays are mutable. Meaning, we can directly modify them.
+
+```
+const [pointer, setPointer] = useState({x: 1, y: 2});
+pointer.x = 2; // can be done but won't trigger re-render
+```
+
+It's permitted to do but it won't trigger a re-render as set state function is not being used. Hence, React is unaware of any changes in the state.
+
+```
+setPointer({x: 2, y: 2});
+```
+
+Also, local mutation is fine. This is incorrect -
+```
+position.x = e.clientX;
+position.y = e.clientY;
+```
+
+This local mutation is absolutely fine -
+```
+const nextPosition = {};
+nextPosition.x = e.clientX;
+nextPosition.y = e.clientY;
+setPosition(nextPosition);
+```
+
+Mutation is only a problem when you change existing objects that are already in state. Mutating an object you’ve just created is okay because no other code references it yet. Changing it isn’t going to accidentally impact something that depends on it. This is called a “local mutation”. You can even do local mutation while rendering. Very convenient and completely okay.
+
+#### Using a single event handler for multiple fields
+
+You can also use the [ and ] braces inside your object definition to specify a property with dynamic name. Here is the same example, but with a single event handler instead of three different ones:
+```
+import { useState } from 'react';
+
+export default function Form() {
+  const [person, setPerson] = useState({
+    firstName: 'Barbara',
+    lastName: 'Hepworth',
+    email: 'bhepworth@sculpture.com'
+  });
+
+  function handleChange(e) {
+    setPerson({
+      ...person,
+      [e.target.name]: e.target.value
+    });
+  }
+
+  return (
+    <>
+      <label>
+        First name:
+        <input
+          name="firstName"
+          value={person.firstName}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Last name:
+        <input
+          name="lastName"
+          value={person.lastName}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Email:
+        <input
+          name="email"
+          value={person.email}
+          onChange={handleChange}
+        />
+      </label>
+      <p>
+        {person.firstName}{' '}
+        {person.lastName}{' '}
+        ({person.email})
+      </p>
+    </>
+  );
+}
+```
+
+#### Writing concise logic with Immer
+
+Immer is a popular library that lets you write using the convenient but mutating syntax and takes care of producing the copies for you. With Immer, the code you write looks like you are “breaking the rules” and mutating an object:
+
+```
+updatePerson(draft => {
+  draft.artwork.city = 'Lagos';
+});
+```
+
+But unlike a regular mutation, it doesn’t overwrite the past state!
+
+##### How does Immer work?
+
+The `draft` provided by Immer is a special type of object, called a [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), that “records” what you do with it. This is why you can mutate it freely as much as you like! Under the hood, Immer figures out which parts of the `draft` have been changed, and produces a completely new object that contains your edits.
+
+### Updating Array State
+
+Here is a reference table of common array operations. When dealing with arrays inside React state, you will need to avoid the methods in the left column, and instead prefer the methods in the right column:
+
+![](../images/updating_states_in_array.png)
+
+
+### Thinking about UI declaratively
+
+In React, we think about UI declaratively. Consider React as a driver and we are sitting next to it. Now, there are two types of instructions possible. Either we direct the driver about each turn, road etc or we directly tell driver about the destination and React will take us there. The first approach is used by scratch JS where we define each and every action precisely. Second happens in React. We define only end goals and React is able to produce it.
+
+Manipulating the UI imperatively works well enough for isolated examples, but it gets exponentially more difficult to manage in more complex systems. In React, you don’t directly manipulate the UI—meaning you don’t enable, disable, show, or hide components directly. Instead, you declare what you want to show, and React figures out how to update the UI.
+
+Here is how you can think of UI declaratively -
+
+1. Identify your component’s different visual states
+2. Determine what triggers those state changes
+3. Represent the state in memory using useState
+4. Remove any non-essential state variables
+5. Connect the event handlers to set the state
+
+### All about states
+
+- We should not use index as key because if array elements position changes, it will be hard to differenciate for React. Consider, reversing the list of items. See example for it [here](https://codesandbox.io/s/6wbche?file=/App.js&utm_medium=sandpack).
+
+#### Extracting state logic into reducer
+
+- To convert from useState to useReducer:
+	1.  Dispatch actions from event handlers.
+	2. Write a reducer function that returns the next state for a given state and action.
+	3. Replace useState with useReducer.
+- Reducers require you to write a bit more code, but they help with debugging and testing.
+- Reducers must be pure.
+- Each action describes a single user interaction.
+- Use Immer if you want to write reducers in a mutating style.
+
+
+### Context
+
+We face problems with prop drilling. Context is an alternative in that case. We require three steps to mould it into our code -
+1. Create a context with `createContext(defaultValue)`
+	```
+	import { createContext } from 'react';
+
+	export const LevelContext = createContext(1);
+	```
+2. Use that context using `useContext`
+	```
+	export default function Heading({ children }) {
+		const level = useContext(LevelContext);
+		// ...
+	}
+	```
+3. Provide that context from the component that specifies that data
+	```
+	import { LevelContext } from './LevelContext.js';
+
+	export default function Section({ level, children }) {
+	return (
+		<section className="section">
+		<LevelContext.Provider value={level}>
+			{children}
+		</LevelContext.Provider>
+		</section>
+	);
+	}
+	```
+
+By default, component picks the data specified in creating the context. We need to provide it down the tree through `SomeContext.Provider`
+
+We can also use and provide the context from same component -
+
+```
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
+
+export default function Section({ children }) {
+  const level = useContext(LevelContext);
+  return (
+    <section className="section">
+      <LevelContext.Provider value={level + 1}>
+        {children}
+      </LevelContext.Provider>
+    </section>
+  );
+}
+```
+
+#### Analysis of need of context
+
+Context is very tempting to use! However, this also means it’s too easy to overuse it. Just because you need to pass some props several levels deep doesn’t mean you should put that information into context.
+
+Here’s a few alternatives you should consider before using context:
+
+1. **Start by passing props**. If your components are not trivial, it’s not unusual to pass a dozen props down through a dozen components. It may feel like a slog, but it makes it very clear which components use which data! The person maintaining your code will be glad you’ve made the data flow explicit with props.
+2. **Extract components and pass JSX as children to them**. If you pass some data through many layers of intermediate components that don’t use that data (and only pass it further down), this often means that you forgot to extract some components along the way. For example, maybe you pass data props like posts to visual components that don’t use them directly, like `<Layout posts={posts} />`. Instead, make Layout take children as a prop, and render `<Layout><Posts posts={posts} /></Layout>`. This reduces the number of layers between the component specifying the data and the one that needs it.
+If neither of these approaches works well for you, consider context.
+
+
+#### Combining context with reducer
+
+- You can combine reducer with context to let any component read and update state above it.
+- To provide state and the dispatch function to components below:
+	1. Create two contexts (for state and for dispatch functions).
+	2. Provide both contexts from the component that uses the reducer.
+	3. Use either context from components that need to read them.
+- You can further declutter the components by moving all wiring into one file.
+- You can export a component like TasksProvider that provides context.
+- You can also export custom Hooks like useTasks and useTasksDispatch to read it.
+- You can have many context-reducer pairs like this in your app.
+
+
+### useEffect
+
+Refer doc - https://react.dev/learn/synchronizing-with-effects
+
+Effects are an escape hatch from the React paradigm. They let you “step outside” of React and synchronize your components with some external system like a non-React widget, network, or the browser DOM. If there is no external system involved (for example, if you want to update a component’s state when some props or state change), you shouldn’t need an Effect. Removing unnecessary Effects will make your code easier to follow, faster to run, and less error-prone.
+
+**Effects run after every render.** This is why following code will produce an infinite loop
+
+```
+const [count, setCount] = useState(0);
+useEffect(() => {
+  setCount(count + 1);
+});
+```
+
+**React always cleans up the previous render’s Effect before the next render’s Effect.**
+
+
+#### How to write effects
+
+To write an Effect, follow these three steps:
+
+1. Declare an Effect. By default, your Effect will run after every render.
+2. Specify the Effect dependencies. Most Effects should only re-run when needed rather than after every render. For example, a fade-in animation should only trigger when a component appears. Connecting and disconnecting to a chat room should only happen when the component appears and disappears, or when the chat room changes. You will learn how to control this by specifying dependencies.
+3. Add cleanup if needed. Some Effects need to specify how to stop, undo, or clean up whatever they were doing. For example, “connect” needs “disconnect”, “subscribe” needs “unsubscribe”, and “fetch” needs either “cancel” or “ignore”. You will learn how to do this by returning a cleanup function.
+
+#### Dependency
+
+```
+useEffect(() => {
+  // This runs after every render
+});
+
+useEffect(() => {
+  // This runs only on mount (when the component appears)
+}, []);
+
+useEffect(() => {
+  // This runs on mount *and also* if either a or b have changed since the last render
+}, [a, b]);
+```
+
+If you specify an empty dependency array and a state or prop is being used inside, then React throws error that `React Hook useEffect has a missing dependency: 'someProp'`.
+
+Ref has been omitted from the dependency array. This is because the ref object has a stable identity: React guarantees you’ll always get the same object from the same useRef call on every render. It never changes, so it will never by itself cause the Effect to re-run. Therefore, it does not matter whether you include it or not.
+
+**Effects are fired twice in development**. React intentionally remounts your components in development to find bugs. There are some APIs that may not allow to be called twice in a row. In that case, we should provide the cleanup function. React remounts the component once in development to verify that you’ve implemented cleanup well. For example -
+```
+useEffect(() => {
+  const dialog = dialogRef.current;
+  dialog.showModal();
+  return () => dialog.close();
+}, []);
+```
+
+If your Effect fetches something, the cleanup function should either abort the fetch or ignore its result:
+
+```
+useEffect(() => {
+  let ignore = false;
+
+  async function startFetching() {
+    const json = await fetchTodos(userId);
+    if (!ignore) {
+      setTodos(json);
+    }
+  }
+
+  startFetching();
+
+  return () => {
+    ignore = true;
+  };
+}, [userId]);
+```
+
+You can’t “undo” a network request that already happened, but your cleanup function should ensure that the fetch that’s not relevant anymore does not keep affecting your application. If the `userId` changes from 'Alice' to 'Bob', cleanup ensures that the 'Alice' response is ignored even if it arrives after 'Bob'.
+
+In development, you will see two fetches in the Network tab. In production, there will be only one.
+
+#### If needed?
+
+Don’t rush to add Effects to your components. Keep in mind that Effects are typically used to “step out” of your React code and synchronize with some external system. This includes browser APIs, third-party widgets, network, and so on. If your Effect only adjusts some state based on other state, you might not need an Effect.
+
+
+#### Pitfalls
+
+- **Effects don’t run on the server**. This means that the initial server-rendered HTML will only include a loading state with no data. The client computer will have to download all JavaScript and render your app only to discover that now it needs to load the data. This is not very efficient.
+- **Fetching directly in Effects makes it easy to create “network waterfalls”**. You render the parent component, it fetches some data, renders the child components, and then they start fetching their data. If the network is not very fast, this is significantly slower than fetching all data in parallel.
+- **Fetching directly in Effects usually means you don’t preload or cache data**. For example, if the component unmounts and then mounts again, it would have to fetch the data again.
+- **It’s not very ergonomic**. There’s quite a bit of boilerplate code involved when writing fetch calls in a way that doesn’t suffer from bugs like race conditions.
+
+##### Remedies
+
+- use a framework and use it's built-in data fetching mechanisms
+- consider using or building a client-side cache
+
+#### Recap
+
+- Unlike events, Effects are caused by rendering itself rather than a particular interaction.
+- Effects let you synchronize a component with some external system (third-party API, network, etc).
+- By default, Effects run after every render (including the initial one).
+- React will skip the Effect if all of its dependencies have the same values as during the last render.
+- You can’t “choose” your dependencies. They are determined by the code inside the Effect.
+- Empty dependency array ([]) corresponds to the component “mounting”, i.e. being added to the screen.
+- In Strict Mode, React mounts components twice (in development only!) to stress-test your Effects.
+- If your Effect breaks because of remounting, you need to implement a cleanup function.
+- React will call your cleanup function before the Effect runs next time, and during the unmount.
+
+#### Practice
+
+```
+import { useState, useEffect } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    function onTick() {
+      setCount(c => c + 1);
+    }
+
+    const intervalId = setInterval(onTick, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return <h1>{count}</h1>;
+}
+```
+
+Figure out why the second tick increases by two not one.
+
+### Lifecycle
+
+Every React component goes through the same lifecycle:
+
+- A component mounts when it’s added to the screen.
+- A component updates when it receives new props or state, usually in response to an interaction.
+- A component unmounts when it’s removed from the screen.
+
+
+### `useCallback`
+
+`useCallback` caches the function so that it doesn't trigger non-required re-render. When a state changes, all of its children including the parent component is re-rendered. Suppose there is a event handler callback. On state change, this function will be different and hence, it will trigger re-render of all of its children.
+
+`memo` lets you skip re-rendering a component when its props are unchanged.
+
+```
+function ProductPage({ productId, referrer, theme }) {
+  // Every time the theme changes, this will be a different function...
+  function handleSubmit(orderDetails) {
+    post('/product/' + productId + '/buy', {
+      referrer,
+      orderDetails,
+    });
+  }
+
+  return (
+    <div className={theme}>
+      {/* ... so ShippingForm's props will never be the same, and it will re-render every time */}
+      <ShippingForm onSubmit={handleSubmit} />
+    </div>
+  );
+}
+```
+
+For example, here on change of `theme`, the complete component re-renders. `ShippingForm` also re-renders because `handleSubmit` has changed. On each re-render, the function changes in Javascript. Since this is a change in prop, the child component `ShippingForm` will re-render. This adds an overhead if there would have been a large tree down the `ShippingForm`.
+
+To avoid this and optimize it, we use `useCallback` which caches the function itself.
+
+```
+function ProductPage({ productId, referrer, theme }) {
+  // Tell React to cache your function between re-renders...
+  const handleSubmit = useCallback((orderDetails) => {
+    post('/product/' + productId + '/buy', {
+      referrer,
+      orderDetails,
+    });
+  }, [productId, referrer]); // ...so as long as these dependencies don't change...
+
+  return (
+    <div className={theme}>
+      {/* ...ShippingForm will receive the same props and can skip re-rendering */}
+      <ShippingForm onSubmit={handleSubmit} />
+    </div>
+  );
+}
+```
+
+As you can see, now if theme changes, it won't trigger re-render of `ShippingForm` as `handleSubmit` stays the same.
+
+#### Difference between `useCallback` and `useMemo`
+
+`useCallback` caches the function itself and `useMemo` caches the returned result of the function.
+
+```
+import { useMemo, useCallback } from 'react';
+
+function ProductPage({ productId, referrer }) {
+  const product = useData('/product/' + productId);
+
+  const requirements = useMemo(() => { // Calls your function and caches its result
+    return computeRequirements(product);
+  }, [product]);
+
+  const handleSubmit = useCallback((orderDetails) => { // Caches your function itself
+    post('/product/' + productId + '/buy', {
+      referrer,
+      orderDetails,
+    });
+  }, [productId, referrer]);
+
+  return (
+    <div className={theme}>
+      <ShippingForm requirements={requirements} onSubmit={handleSubmit} />
+    </div>
+  );
+}
+```
+
+The difference is in what they’re letting you cache:
+
+- **useMemo** caches the result of calling your function. In this example, it caches the result of calling computeRequirements(product) so that it doesn’t change unless product has changed. This lets you pass the requirements object down without unnecessarily re-rendering ShippingForm. When necessary, React will call the function you’ve passed during rendering to calculate the result.
+- **useCallback** caches the function itself. Unlike useMemo, it does not call the function you provide. Instead, it caches the function you provided so that handleSubmit itself doesn’t change unless productId or referrer has changed. This lets you pass the handleSubmit function down without unnecessarily re-rendering ShippingForm. Your code won’t run until the user submits the form.
+
+
+#### Should we use `useCallback` everywhere?
+
+Caching a function with useCallback  is only valuable in a few cases:
+
+- You pass it as a prop to a component wrapped in memo. You want to skip re-rendering if the value hasn’t changed. Memoization lets your component re-render only if dependencies changed.
+- The function you’re passing is later used as a dependency of some Hook. For example, another function wrapped in useCallback depends on it, or you depend on this function from useEffect.
+
+### `forwardRef`
+
+`forwardRef` lets your component expose a DOM node to parent component with a ref.
+
+```
+const SomeComponent = forwardRef(render)
+```
+
+#### Usage
+
+- Exposing a DOM node to the parent component
+	```
+	import { forwardRef } from 'react';
+
+	const MyInput = forwardRef(function MyInput(props, ref) {
+	const { label, ...otherProps } = props;
+	return (
+		<label>
+		{label}
+		<input {...otherProps} />
+		</label>
+	);
+	});
+	```
+
+	```
+	import { forwardRef } from 'react';
+
+	const MyInput = forwardRef(function MyInput(props, ref) {
+	const { label, ...otherProps } = props;
+	return (
+		<label>
+		{label}
+		<input {...otherProps} ref={ref} />
+		</label>
+	);
+	});
+	```
+
+- Forwarding a ref through multiple components
+- Exposing an imperative handle instead of a DOM node
