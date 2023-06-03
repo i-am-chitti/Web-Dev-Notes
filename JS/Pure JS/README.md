@@ -91,7 +91,6 @@ You cannot declare a constant with the same name as a function or variable in th
 ## Datatypes
 
 * Number
-* BigInt
 * String
 * Boolean
 * Symbol
@@ -109,11 +108,35 @@ NaN is toxic: if you provide it as an operand to any mathematical operation, the
 
 ```NaN + 5; //NaN```
 
+There are 7 datatypes -
+Primitive - number, string, boolean, null, undefined, symbol
+Object - Array, Functions, object
+
 __Revise Javascript__ [Here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript#other_types)
 
-## Functions
+Javascript does implicit conversion.
 
-### Higher order functions
+```
+const num1 = 'Joh';
+const num2 = 'Hello';
+console.log(num1 - num2); // NaN
+
+const num3 = '10';
+const num4 = '20';
+console.log(num3-num4) // '-10'
+
+console.log(num3+num4) // '1020'
+
+console.log(20+'23') // 2023
+```
+
+For input of type number, in JS, its value will be string. From HTML, it comes as string. We need to do explicit conversion with `parseInt`.
+
+```
+console.log(typeof null); //object
+```
+
+## Functions
 
 Every JS function is actually a function object. Thus, like objects, functions also have properties and methods.
 
@@ -127,6 +150,8 @@ console.log(auxName.name);  // myFun
 ```
 
 Other properties are _.length_, and methods are _.toString()_ etc
+
+### Higher order functions
 
 **Higher order Function** are those function which either accepts a function as argument or returns a function or both.
 
@@ -298,3 +323,64 @@ let destinations = { x: 'LA', y: 'NYC', z: 'MIA' };
 let { x, y, z } = destinations;
 console.log(x, y, z); // Prints LA NYC MIA
 ```
+
+
+## `this` keyword
+
+The value of `this` depends on in which context it appears: function, class, or global.
+
+
+## Closure
+
+A closure is the combination of a function and the lexical environment within which that function was declared. This environment consists of any local variables that were in-scope at the time the closure was created. In this case, `myFunc` is a reference to the instance of the function displayName that is created when `makeFunc` is run. The instance of `displayName` maintains a reference to its lexical environment, within which the variable name exists. For this reason, when `myFunc` is invoked, the variable `name` remains available for use, and "Mozilla" is passed to `console.log`.
+
+```
+function makeFunc() {
+  const name = "Mozilla";
+  function displayName() {
+    console.log(name);
+  }
+  return displayName;
+}
+
+const myFunc = makeFunc();
+myFunc();
+```
+
+Every closure has three scopes:
+
+- Local scope (Own scope)
+- Enclosing scope (can be block, function, or module scope)
+- Global scope
+
+
+### Value vs Reference
+
+When assigning primitive data type value to a variable, any changes are made directly to that value without affecting the original value.
+
+When assigning non-primitive data type ot a variable value to a variable, it is done by reference so any changes will affect all the references.
+
+### Truthy vs falsy
+
+"", '', ``, 0 ,-0, null, undefined, NaN, false are evaluated as falsy.
+
+
+### Variable Lookup
+
+A variable is first looked up in the local scope (`{}`), then, in global scope.
+
+
+### Math
+ It is a standard built-in object always available.
+
+ ```
+ const number = 93.1938;
+ console.log(Math.floor(number)); // 93
+ console.log(Math.ceil(number)); // 94
+ ```
+
+### currentTarget vs target
+
+`currentTarget` - always refers to the element to which event listener has been attached to
+
+`target` - identifies the element on which the event has occurred.
